@@ -1,0 +1,428 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  privyId       String   @unique
+  walletAddress String   @unique
+  email         String?  @unique
+  username      String?  @unique
+  avatarUrl     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  creator       Creator?
+  subscriptions Subscription[]
+  purchases     Purchase[]
+  payments      Payment[]
+  ledgerEntries LedgerEntry[]
+  communityMemberships CommunityMember[]
+  communityComments    CommunityPostComment[]
+  communityLikes       CommunityPostLike[]
+
+  @@index([walletAddress])
+}
+
+// ─── Creators ─────────────────────────────────────────────────────────────────
+
+model Creator {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  handle         String   @unique
+  displayName    String
+  bio            String?
+  bannerUrl      String?
+  isVerified     Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  platformFeeBps Int      @default(500)
+
+  pendingBalance BigInt   @default(0)
+  settledBalance BigInt   @default(0)
+  totalEarned    BigInt   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptionTiers SubscriptionTier[]
+  content           Content[]
+  products          Product[]
+  subscriptions     Subscription[]
+  payouts           Payout[]
+  communities       Community[]
+  communityPosts    CommunityPost[]
+
+  @@index([handle])
+}
+
+// ─── Subscription Tiers ───────────────────────────────────────────────────────
+
+model SubscriptionTier {
+  id           String   @id @default(cuid())
+  creatorId    String
+  creator      Creator  @relation(fields: [creatorId], references: [id])
+  name         String
+  description  String?
+  priceUsdc    BigInt
+  intervalDays Int      @default(30)
+  isActive     Boolean  @default(true)
+  perks        String[] @default([])
+  maxSubscribers Int?
+
+  contentAccess ContentAccess[]
+  subscriptions Subscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorId])
+}
+
+// ─── Subscriptions ────────────────────────────────────────────────────────────
+
+model Subscription {
+  id                 String             @id @default(cuid())
+  userId             String
+  user               User               @relation(fields: [userId], references: [id])
+  creatorId          String
+  creator            Creator            @relation(fields: [creatorId], references: [id])
+  tierId             String
+  tier               SubscriptionTier   @relation(fields: [tierId], references: [id])
+  status             SubscriptionStatus @default(ACTIVE)
+  onChainSubId       String?
+  txHash             String?
+
+  startedAt          DateTime  @default(now())
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelledAt        DateTime?
+  renewalCount       Int       @default(0)
+
+  payments Payment[]
+
+  @@unique([userId, tierId])
+  @@index([userId, status])
+  @@index([creatorId, status])
+  @@index([currentPeriodEnd])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+// ─── Content ──────────────────────────────────────────────────────────────────
+
+model Content {
+  id           String      @id @default(cuid())
+  creatorId    String
+  creator      Creator     @relation(fields: [creatorId], references: [id])
+  title        String
+  description  String?
+  type         ContentType
+  mediaUrl     String?
+  thumbnailUrl String?
+  isPublished  Boolean     @default(false)
+  isFree       Boolean     @default(false)
+  priceUsdc    BigInt?
+  accessType   AccessType  @default(SUBSCRIPTION)
+  views        Int         @default(0)
+
+  moderationStatus ModerationStatus @default(PENDING)
+  nsfwScore        Float?
+  flaggedAt        DateTime?
+  moderationNotes  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accessRules ContentAccess[]
+  purchases   Purchase[]
+
+  @@index([creatorId, isPublished])
+}
+
+enum ContentType {
+  VIDEO
+  ARTICLE
+  IMAGE_GALLERY
+  AUDIO
+  FILE
+}
+
+enum AccessType {
+  FREE
+  SUBSCRIPTION
+  ONE_TIME_PURCHASE
+  SUBSCRIPTION_OR_PURCHASE
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  FLAGGED
+}
+
+model ContentAccess {
+  id        String            @id @default(cuid())
+  contentId String
+  content   Content           @relation(fields: [contentId], references: [id])
+  tierId    String?
+  tier      SubscriptionTier? @relation(fields: [tierId], references: [id])
+}
+
+// ─── Products ─────────────────────────────────────────────────────────────────
+
+model Product {
+  id          String      @id @default(cuid())
+  creatorId   String
+  creator     Creator     @relation(fields: [creatorId], references: [id])
+  name        String
+  description String?
+  imageUrl    String?
+  priceUsdc   BigInt
+  productType ProductType
+  deliveryUrl String?
+  isActive    Boolean     @default(true)
+  stock       Int?
+  totalSold   Int         @default(0)
+
+  purchases Purchase[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ProductType {
+  DIGITAL_DOWNLOAD
+  NFT_ACCESS
+  COMMUNITY_ACCESS
+  CUSTOM
+}
+
+// ─── Purchases ────────────────────────────────────────────────────────────────
+
+model Purchase {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  contentId  String?
+  content    Content? @relation(fields: [contentId], references: [id])
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  paymentId  String   @unique
+  payment    Payment  @relation(fields: [paymentId], references: [id])
+  amountUsdc BigInt
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ─── Payments ─────────────────────────────────────────────────────────────────
+
+model Payment {
+  id              String        @id @default(cuid())
+  fromUserId      String
+  fromUser        User          @relation(fields: [fromUserId], references: [id])
+  toCreatorId     String
+  type            PaymentType
+  status          PaymentStatus @default(PENDING)
+
+  grossAmountUsdc BigInt
+  platformFeeUsdc BigInt
+  netAmountUsdc   BigInt
+
+  txHash          String?   @unique
+  blockNumber     BigInt?
+  confirmedAt     DateTime?
+  settledToCreator Boolean  @default(false)
+
+  subscriptionId  String?
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
+  purchase        Purchase?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ledgerEntries LedgerEntry[]
+
+  @@index([txHash])
+  @@index([toCreatorId, status])
+  @@index([fromUserId])
+  @@index([status, settledToCreator])
+}
+
+enum PaymentType {
+  SUBSCRIPTION_INITIAL
+  SUBSCRIPTION_RENEWAL
+  CONTENT_PURCHASE
+  PRODUCT_PURCHASE
+  COMMUNITY_JOIN
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMING
+  CONFIRMED
+  FAILED
+  REFUNDED
+}
+
+// ─── Ledger ───────────────────────────────────────────────────────────────────
+
+model LedgerEntry {
+  id            String          @id @default(cuid())
+  userId        String?
+  user          User?           @relation(fields: [userId], references: [id])
+  paymentId     String?
+  payment       Payment?        @relation(fields: [paymentId], references: [id])
+  payoutId      String?
+  payout        Payout?         @relation(fields: [payoutId], references: [id])
+  type          LedgerEntryType
+  amountUsdc    BigInt
+  balanceBefore BigInt
+  balanceAfter  BigInt
+  note          String?
+
+  createdAt DateTime @default(now())
+
+  @@index([paymentId])
+  @@index([payoutId])
+}
+
+enum LedgerEntryType {
+  PAYMENT_RECEIVED
+  PLATFORM_FEE
+  SETTLEMENT_TO_AVAILABLE
+  PAYOUT_INITIATED
+  PAYOUT_CONFIRMED
+  ADJUSTMENT
+}
+
+// ─── Payouts ──────────────────────────────────────────────────────────────────
+
+model Payout {
+  id            String       @id @default(cuid())
+  creatorId     String
+  creator       Creator      @relation(fields: [creatorId], references: [id])
+  amountUsdc    BigInt
+  toAddress     String
+  status        PayoutStatus @default(REQUESTED)
+  txHash        String?      @unique
+  requestedAt   DateTime     @default(now())
+  processedAt   DateTime?
+  confirmedAt   DateTime?
+  failureReason String?
+
+  ledgerEntries LedgerEntry[]
+
+  @@index([creatorId, status])
+}
+
+enum PayoutStatus {
+  REQUESTED
+  PROCESSING
+  CONFIRMED
+  FAILED
+}
+
+// ─── Communities ──────────────────────────────────────────────────────────────
+
+model Community {
+  id                String    @id @default(cuid())
+  creatorId         String
+  creator           Creator   @relation(fields: [creatorId], references: [id])
+  name              String
+  description       String?
+  entryFeeUsdc      BigInt    @default(0)
+  revenueSplitPct   Int       @default(50)
+  communityPool     BigInt    @default(0)
+  isActive          Boolean   @default(true)
+  lastDistributedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  members       CommunityMember[]
+  posts         CommunityPost[]
+  distributions CommunityDistribution[]
+
+  @@index([creatorId])
+}
+
+model CommunityMember {
+  id          String    @id @default(cuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id])
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  joinedAt    DateTime  @default(now())
+
+  @@unique([communityId, userId])
+  @@index([userId])
+}
+
+model CommunityPost {
+  id          String    @id @default(cuid())
+  communityId String
+  community   Community @relation(fields: [communityId], references: [id])
+  creatorId   String
+  creator     Creator   @relation(fields: [creatorId], references: [id])
+  body        String
+  mediaUrl    String?
+  mediaType   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  likes    CommunityPostLike[]
+  comments CommunityPostComment[]
+
+  @@index([communityId, createdAt])
+}
+
+model CommunityPostLike {
+  id        String        @id @default(cuid())
+  postId    String
+  post      CommunityPost @relation(fields: [postId], references: [id])
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
+
+  @@unique([postId, userId])
+}
+
+model CommunityPostComment {
+  id        String        @id @default(cuid())
+  postId    String
+  post      CommunityPost @relation(fields: [postId], references: [id])
+  authorId  String
+  author    User          @relation(fields: [authorId], references: [id])
+  body      String
+  createdAt DateTime      @default(now())
+
+  @@index([postId])
+}
+
+model CommunityDistribution {
+  id            String    @id @default(cuid())
+  communityId   String
+  community     Community @relation(fields: [communityId], references: [id])
+  totalAmount   BigInt
+  creatorShare  BigInt
+  memberShare   BigInt
+  memberCount   Int
+  txHashes      String[]
+  distributedAt DateTime  @default(now())
+
+  @@index([communityId])
+}

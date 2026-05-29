@@ -1,0 +1,31 @@
+<svg width="48" height="70" viewBox="0 0 48 70" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ArcCom">
+  <defs>
+    <linearGradient id="arcGrad" x1="2" y1="2" x2="46" y2="68" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#D4E4FF"/>
+      <stop offset="38%"  stop-color="#7B9FF5"/>
+      <stop offset="100%" stop-color="#2138CC"/>
+    </linearGradient>
+    <filter id="arcGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="0.6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Arch A -->
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    fill="url(#arcGrad)"
+    filter="url(#arcGlow)"
+    d="M 2 42 L 2 24 A 22 22 0 0 0 46 24 L 46 42 Z M 12 42 L 36 42 L 36 24 A 12 12 0 0 0 12 24 L 12 42 Z M 36 30 C 30 26 18 29 15 33 C 14 34 14 37 16 38 C 19 39 30 38 36 38 Z"
+  />
+
+  <!-- Dollar sign -->
+  <g stroke="url(#arcGrad)" stroke-linecap="round" fill="none" filter="url(#arcGlow)">
+    <path stroke-width="3.4" d="M 34 51 C 34 47 14 47 14 52 C 14 57 34 57 34 62 C 34 67 14 67 14 63"/>
+    <line x1="24" y1="45" x2="24" y2="68" stroke-width="2.8"/>
+  </g>
+</svg>
