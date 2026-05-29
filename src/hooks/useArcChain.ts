@@ -7,6 +7,18 @@ import { arcTestnet, arcTestnetAddParams } from '@/lib/wagmi/chains';
 
 type SwitchState = 'idle' | 'switching' | 'error';
 
+// MetaMask rejects wallet_addEthereumChain when nativeCurrency.decimals !== 18.
+// Arc Testnet uses USDC (6 decimals) as native, so we send decimals=18 to satisfy
+// MetaMask's validation — the value is cosmetic in MetaMask's UI only.
+const arcTestnetAddParamsMetaMask = {
+  ...arcTestnetAddParams,
+  nativeCurrency: { ...arcTestnetAddParams.nativeCurrency, decimals: 18 },
+};
+
+function isMetaMask(provider: { isMetaMask?: boolean }): boolean {
+  return !!provider?.isMetaMask;
+}
+
 export function useArcChain() {
   const chainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
@@ -24,16 +36,19 @@ export function useArcChain() {
       await switchChainAsync({ chainId: arcTestnet.id });
       setState('idle');
     } catch (switchError: unknown) {
-      // Chain not registered in wallet — add it first via EIP-3085
       const code = (switchError as { code?: number })?.code;
       if (code === 4902) {
         try {
           const wallet = wallets[0];
           if (!wallet) throw new Error('No wallet connected');
           const provider = await wallet.getEthereumProvider();
+          // Use MetaMask-compatible params (decimals=18) when talking to MetaMask
+          const addParams = isMetaMask(provider as { isMetaMask?: boolean })
+            ? arcTestnetAddParamsMetaMask
+            : arcTestnetAddParams;
           await provider.request({
             method: 'wallet_addEthereumChain',
-            params: [arcTestnetAddParams],
+            params: [addParams],
           });
           await switchChainAsync({ chainId: arcTestnet.id });
           setState('idle');
