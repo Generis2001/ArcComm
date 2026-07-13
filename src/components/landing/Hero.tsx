@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, Check } from 'lucide-react';
 import { ConnectButton } from '@/components/auth/ConnectButton';
 import { OrbitGraphic } from '@/components/ui/OrbitGraphic';
+import type { LandingStats } from '@/lib/landing/stats';
 
 const highlights = [
   'Creator profiles for publishing and monetization',
@@ -9,7 +10,7 @@ const highlights = [
   'Subscriber communities and gated digital access',
 ];
 
-export function Hero() {
+export function Hero({ stats }: { stats: LandingStats }) {
   return (
     <section className="relative overflow-hidden px-6 pt-28 text-left">
       <div className="mx-auto grid min-h-screen max-w-6xl items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_520px]">
@@ -49,6 +50,24 @@ export function Hero() {
                 <p className="text-sm leading-6 text-white/[0.62]">{item}</p>
               </div>
             ))}
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="arc-panel p-4">
+              <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Creator heartbeat</p>
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorHeartbeat}</p>
+              <p className="mt-2 text-sm leading-6 text-white/[0.54]">Confirmed creator earnings recorded by ArcComm settlements.</p>
+            </div>
+            <div className="arc-panel p-4">
+              <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Active creators</p>
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorCount ?? 'Unavailable'}</p>
+              <p className="mt-2 text-sm leading-6 text-white/[0.54]">Creator profiles currently live on the platform.</p>
+            </div>
+            <div className="arc-panel p-4">
+              <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Router fee</p>
+              <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.routerFeeLabel}</p>
+              <p className="mt-2 text-sm leading-6 text-white/[0.54]">Read directly from the deployed payment router contract.</p>
+            </div>
           </div>
         </div>
 

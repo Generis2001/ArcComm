@@ -4,8 +4,13 @@ import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
 import { ArcSymbolBadge } from '@/components/ui/ArcBadge';
 import { LogoWordmark } from '@/components/ui/Logo';
+import { getLandingStats } from '@/lib/landing/stats';
 
-export default function LandingPage() {
+export const dynamic = 'force-dynamic';
+
+export default async function LandingPage() {
+  const stats = await getLandingStats();
+
   return (
     <div className="arc-shell min-h-screen">
       <nav className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.08] bg-black/[0.70] backdrop-blur-xl">
@@ -31,7 +36,7 @@ export default function LandingPage() {
       </nav>
 
       <main>
-        <Hero />
+        <Hero stats={stats} />
         <FeatureGrid />
       </main>
 

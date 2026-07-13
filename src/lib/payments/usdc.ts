@@ -1,3 +1,5 @@
+import { keccak256, stringToHex } from 'viem';
+
 // USDC uses 6 decimal places
 export const USDC_DECIMALS = 6;
 export const USDC_UNIT = 10n ** BigInt(USDC_DECIMALS);
@@ -33,7 +35,5 @@ export function computeFee(grossUnits: bigint, feeBps: number): bigint {
 
 // Generate a deterministic payment ID from a random string + timestamp
 export function generatePaymentId(raw: string): `0x${string}` {
-  // In prod use ethers.keccak256 or viem keccak256; here we return a hex placeholder
-  // The real ID is generated server-side with keccak256
-  return `0x${Buffer.from(raw).toString('hex').padEnd(64, '0').slice(0, 64)}` as `0x${string}`;
+  return keccak256(stringToHex(raw));
 }
