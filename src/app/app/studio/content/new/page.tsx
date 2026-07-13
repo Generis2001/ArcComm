@@ -232,19 +232,19 @@ export default function NewContentPage() {
       </div>
 
       {/* Static NSFW warning */}
-      <div className="rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3 flex items-start gap-3">
+      <div className="rounded-lg border border-destructive/[0.40] bg-destructive/[0.05] px-4 py-3 flex items-start gap-3">
         <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on ArcCom.</p>
+        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on ArcComm.</p>
       </div>
 
       {/* Dynamic NSFW blocked banner */}
       {nsfwBlocked && (
-        <div className="rounded-lg border border-destructive bg-destructive/10 px-4 py-3 flex items-start gap-3">
+        <div className="rounded-lg border border-destructive bg-destructive/[0.10] px-4 py-3 flex items-start gap-3">
           <ShieldAlert className="h-5 w-5 text-destructive mt-0.5 shrink-0" />
           <div className="space-y-1">
             <p className="text-sm font-semibold text-destructive">Content blocked by automatic moderation</p>
-            <p className="text-sm text-destructive/80">
-              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates ArcCom community standards and is strictly prohibited.
+            <p className="text-sm text-destructive/[0.80]">
+              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates ArcComm community standards and is strictly prohibited.
             </p>
           </div>
         </div>
@@ -258,7 +258,7 @@ export default function NewContentPage() {
             <span>Publishing requires a one-time <strong className="text-foreground">2 USDC listing fee</strong> paid from your wallet.</span>
           </div>
           {feeError && (
-            <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">
+            <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">
               {feeError}
               <button type="button" onClick={resetFee} className="ml-2 underline">Retry</button>
             </p>
@@ -411,7 +411,7 @@ export default function NewContentPage() {
             )}
 
             {error && (
-              <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{error}</p>
+              <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
 
             <div className="flex gap-3 pt-2">

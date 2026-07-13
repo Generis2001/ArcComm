@@ -81,7 +81,7 @@ export default function StudioContentPage() {
       </div>
 
       {toggleError && (
-        <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{toggleError}</p>
+        <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{toggleError}</p>
       )}
 
       {isLoading ? (
@@ -121,10 +121,10 @@ export default function StudioContentPage() {
 
                 {/* Moderation notice for flagged content */}
                 {isFlagged && (
-                  <div className="mx-4 mb-1 rounded-md border border-destructive/40 bg-destructive/5 px-3 py-2 flex items-start gap-2">
+                  <div className="mx-4 mb-1 rounded-md border border-destructive/[0.40] bg-destructive/[0.05] px-3 py-2 flex items-start gap-2">
                     <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                     <p className="text-xs text-destructive">
-                      This content has been flagged as potentially violating ArcCom community standards and cannot be published until reviewed.
+                      This content has been flagged as potentially violating ArcComm community standards and cannot be published until reviewed.
                     </p>
                   </div>
                 )}

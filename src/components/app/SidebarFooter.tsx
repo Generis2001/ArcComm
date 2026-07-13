@@ -1,53 +1,88 @@
 'use client';
 
+import { useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
+import { useRouter } from 'next/navigation';
+import { useDisconnect } from 'wagmi';
+import { Loader2, LogOut, Wallet } from 'lucide-react';
 import { USDCBalance } from '@/components/payments/USDCBalance';
 import { Button } from '@/components/ui/button';
-import { LogOut, Wallet } from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
 
-export function SidebarFooter() {
+export function SidebarFooter({ compact = false }: { compact?: boolean }) {
   const { user, logout, connectWallet } = usePrivy();
+  const { disconnectAsync } = useDisconnect();
+  const router = useRouter();
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
   const walletAddress = user?.wallet?.address;
 
   const shortAddress = walletAddress
     ? `${walletAddress.slice(0, 6)}…${walletAddress.slice(-4)}`
     : null;
 
+  const handleDisconnect = async () => {
+    if (isDisconnecting) return;
+    setIsDisconnecting(true);
+
+    try {
+      await disconnectAsync().catch(() => undefined);
+      await logout();
+    } finally {
+      router.replace('/');
+      router.refresh();
+      window.setTimeout(() => {
+        window.location.assign('/');
+      }, 120);
+    }
+  };
+
   return (
-    <div className="border-t border-border pt-4 space-y-3">
-      {/* USDC balance */}
-      <div className="px-2 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">Balance</span>
-        <USDCBalance showRefresh />
+    <div className={cn('space-y-3 rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] p-4', compact && 'p-3')}>
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/[0.38]">Balance</p>
+          <div className="mt-1 text-sm text-white/[0.78]">
+            <USDCBalance showRefresh />
+          </div>
+        </div>
+        {shortAddress && (
+          <div className="rounded-full border border-white/[0.10] px-3 py-1 font-mono text-[11px] text-white/[0.58]">
+            {shortAddress}
+          </div>
+        )}
       </div>
 
-      {/* Wallet address + connect/disconnect */}
-      <div className="px-2 space-y-2">
+      <div className="space-y-2">
         {walletAddress ? (
-          <>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Wallet className="h-3 w-3 shrink-0" />
-              <span className="font-mono truncate">{shortAddress}</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10 px-2 h-8"
-              onClick={() => logout()}
-            >
-              <LogOut className="mr-2 h-3 w-3" />
-              Disconnect
-            </Button>
-          </>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-between border-white/[0.10] bg-black/[0.45] text-white/[0.72] hover:border-white/[0.16] hover:bg-white/[0.06] hover:text-white"
+            onClick={handleDisconnect}
+            disabled={isDisconnecting}
+          >
+            <span className="inline-flex items-center gap-2">
+              {isDisconnecting ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <LogOut className="h-3.5 w-3.5" />
+              )}
+              {isDisconnecting ? 'Disconnecting' : 'Disconnect wallet'}
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-white/[0.34]">Arc</span>
+          </Button>
         ) : (
           <Button
             variant="arc"
             size="sm"
-            className="w-full text-xs h-8"
+            className="w-full justify-between"
             onClick={() => connectWallet()}
           >
-            <Wallet className="mr-2 h-3 w-3" />
-            Connect Wallet
+            <span className="inline-flex items-center gap-2">
+              <Wallet className="h-3.5 w-3.5" />
+              Connect wallet
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.18em] text-black/[0.50]">USDC</span>
           </Button>
         )}
       </div>

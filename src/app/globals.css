@@ -4,34 +4,131 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 96%;
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 96%;
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 96%;
-    --primary: 234 89% 68%;
-    --primary-foreground: 222 47% 6%;
-    --secondary: 222 47% 12%;
-    --secondary-foreground: 210 40% 96%;
-    --muted: 222 47% 12%;
-    --muted-foreground: 215 20% 55%;
-    --accent: 222 47% 14%;
-    --accent-foreground: 210 40% 96%;
-    --destructive: 0 62% 55%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 222 30% 16%;
-    --input: 222 30% 16%;
-    --ring: 234 89% 68%;
-    --radius: 0.75rem;
+    --background: 0 0% 2%;
+    --foreground: 0 0% 97%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 97%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 97%;
+    --primary: 0 0% 97%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 97%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 97%;
+    --destructive: 0 70% 54%;
+    --destructive-foreground: 0 0% 97%;
+    --border: 0 0% 16%;
+    --input: 0 0% 14%;
+    --ring: 0 0% 82%;
+    --radius: 1.25rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
+
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
+    background-image:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(225deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: auto, auto, 24px 24px, 24px 24px;
+    background-position: center top, center top, 0 0, 0 0;
+  }
+
+  ::selection {
+    background: rgba(255, 255, 255, 0.18);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+}
+
+@layer utilities {
+  .arc-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .arc-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.08), transparent 28%),
+      radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.06), transparent 22%);
+    opacity: 0.8;
+    z-index: -2;
+  }
+
+  .arc-shell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 92%);
+    z-index: -1;
+  }
+
+  .arc-panel {
+    @apply rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_24px_80px_rgba(0,0,0,0.35)];
+    backdrop-filter: blur(22px);
+  }
+
+  .arc-watermark {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .arc-watermark::before {
+    content: attr(data-watermark);
+    position: absolute;
+    inset: auto auto 50% 50%;
+    transform: translate(-50%, 50%);
+    font-size: clamp(5rem, 18vw, 16rem);
+    line-height: 0.85;
+    letter-spacing: -0.08em;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.04);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .arc-kicker {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.04] px-4 py-1.5 text-[0.7rem] uppercase tracking-[0.24em] text-white/[0.72];
+  }
+
+  .arc-copy {
+    @apply text-sm leading-7 text-white/[0.64] md:text-base;
   }
 }

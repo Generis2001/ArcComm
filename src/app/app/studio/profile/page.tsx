@@ -139,7 +139,7 @@ export default function StudioProfilePage() {
               </div>
             )}
             {bannerUrl && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute inset-0 bg-black/[0.40] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 {uploadingBanner ? <Loader2 className="h-5 w-5 text-white animate-spin" /> : <ImagePlus className="h-5 w-5 text-white" />}
               </div>
             )}
@@ -182,7 +182,7 @@ export default function StudioProfilePage() {
               </div>
             )}
             {avatarUrl && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute inset-0 bg-black/[0.40] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 {uploadingAvatar ? <Loader2 className="h-5 w-5 text-white animate-spin" /> : <Camera className="h-5 w-5 text-white" />}
               </div>
             )}
@@ -245,7 +245,7 @@ export default function StudioProfilePage() {
               />
             </div>
 
-            {error && <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{error}</p>}
+            {error && <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>}
             {success && <p className="text-sm text-green-400 rounded-md bg-green-500/10 px-3 py-2">{success}</p>}
 
             <div className="flex gap-3 pt-2">

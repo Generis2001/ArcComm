@@ -129,7 +129,7 @@ export default function NewCommunityPage() {
             </div>
 
             {error && (
-              <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{error}</p>
+              <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
 
             <div className="flex gap-3 pt-2">

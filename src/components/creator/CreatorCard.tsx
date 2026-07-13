@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 import { BadgeCheck, FileText } from 'lucide-react';
-import { formatUsdc } from '@/lib/payments/usdc';
 import { SubscribeButton } from '@/components/payments/SubscribeButton';
+import { Badge } from '@/components/ui/badge';
+import { formatUsdc } from '@/lib/payments/usdc';
 import type { CreatorProfile } from '@/types/creator';
 
 interface CreatorCardProps {
@@ -20,53 +20,50 @@ export function CreatorCard({ creator }: CreatorCardProps) {
   const contentPreview = creator.content?.slice(0, 3) ?? [];
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden hover:border-arc-600/40 transition-all hover:shadow-lg hover:shadow-arc-600/5">
-      {/* Banner — clicking goes to profile */}
+    <div className="overflow-hidden rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] transition-transform duration-200 hover:-translate-y-1">
       <Link href={`/app/creator/${creator.handle}`} className="block">
         {creator.bannerUrl ? (
           <div className="relative h-24 w-full">
             <Image src={creator.bannerUrl} alt="" fill className="object-cover" />
           </div>
         ) : (
-          <div className="h-24 w-full bg-gradient-to-br from-arc-800 to-arc-950" />
+          <div className="h-24 w-full bg-[linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,255,255,0.02))]" />
         )}
       </Link>
 
-      <div className="p-4 pt-2 space-y-3">
-        {/* Name row — clicking goes to profile */}
+      <div className="space-y-3 p-4 pt-3">
         <Link href={`/app/creator/${creator.handle}`} className="block">
           <div className="flex items-center gap-1.5">
-            <p className="font-semibold hover:text-arc-400 transition-colors">{creator.displayName}</p>
-            {creator.isVerified && <BadgeCheck className="h-4 w-4 text-arc-400" />}
+            <p className="font-semibold text-white transition-colors hover:text-white/[0.72]">{creator.displayName}</p>
+            {creator.isVerified && <BadgeCheck className="h-4 w-4 text-white/[0.72]" />}
           </div>
-          <p className="text-xs text-muted-foreground">@{creator.handle}</p>
+          <p className="text-xs text-white/[0.44]">@{creator.handle}</p>
         </Link>
 
-        {creator.bio && (
-          <p className="text-sm text-muted-foreground line-clamp-2">{creator.bio}</p>
-        )}
+        {creator.bio && <p className="line-clamp-2 text-sm text-white/[0.56]">{creator.bio}</p>}
 
         {contentPreview.length > 0 && (
           <div className="space-y-1.5 pt-0.5">
             {contentPreview.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <FileText className="h-3 w-3 text-muted-foreground shrink-0" />
-                  <span className="truncate text-muted-foreground">{item.title}</span>
+                <div className="flex min-w-0 items-center gap-1.5">
+                  <FileText className="h-3 w-3 shrink-0 text-white/[0.34]" />
+                  <span className="truncate text-white/[0.52]">{item.title}</span>
                 </div>
                 {item.isFree ? (
-                  <span className="text-emerald-500 shrink-0">Free</span>
+                  <span className="shrink-0 text-emerald-300">Free</span>
                 ) : item.priceUsdc ? (
-                  <span className="text-arc-400 font-medium shrink-0">{formatUsdc(BigInt(item.priceUsdc))}</span>
+                  <span className="shrink-0 font-medium text-white/[0.84]">{formatUsdc(BigInt(item.priceUsdc))}</span>
                 ) : (
-                  <Badge variant="outline" className="text-[10px] px-1 py-0 shrink-0">Sub</Badge>
+                  <Badge variant="outline" className="shrink-0 px-1 py-0 text-[10px]">
+                    Sub
+                  </Badge>
                 )}
               </div>
             ))}
           </div>
         )}
 
-        {/* Subscribe button — interactive, outside the Link */}
         {tier && (
           <div className="pt-1">
             <SubscribeButton creatorId={creator.id} tier={tier} size="sm" />

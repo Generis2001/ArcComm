@@ -137,7 +137,7 @@ export default function StudioStorePage() {
                 <span>Listing a product requires a <strong className="text-foreground">2 USDC fee</strong> paid from your wallet before saving.</span>
               </div>
               {feeError && (
-                <p className="text-xs text-destructive rounded bg-destructive/10 px-2 py-1.5">
+                <p className="text-xs text-destructive rounded bg-destructive/[0.10] px-2 py-1.5">
                   {feeError}
                   <button type="button" onClick={resetFee} className="ml-2 underline">Retry</button>
                 </p>
@@ -173,7 +173,7 @@ export default function StudioStorePage() {
               <Input value={form.fileUrl} onChange={(e) => setForm({ ...form, fileUrl: e.target.value })} placeholder="https://..." />
             </div>
             {error && (
-              <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{error}</p>
+              <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
             <div className="flex gap-3 pt-1">
               <Button type="submit" variant="arc" disabled={!feePaid || saving}>

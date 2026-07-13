@@ -4,7 +4,7 @@ import { arcTestnet } from '@/lib/wagmi/config';
 export const privyConfig: PrivyClientConfig = {
   appearance: {
     theme: 'dark',
-    accentColor: '#6370f5',
+    accentColor: '#F5F5F5',
     logo: '/assets/logo.svg',
   },
   embeddedWallets: {

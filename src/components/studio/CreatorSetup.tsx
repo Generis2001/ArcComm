@@ -102,7 +102,7 @@ export function CreatorSetup() {
                   </div>
                 )}
                 {avatarUrl && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute inset-0 bg-black/[0.40] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <Camera className="h-5 w-5 text-white" />
                   </div>
                 )}
@@ -158,7 +158,7 @@ export function CreatorSetup() {
             </div>
 
             {error && (
-              <p className="text-sm text-destructive rounded-md bg-destructive/10 px-3 py-2">{error}</p>
+              <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
 
             {success && (

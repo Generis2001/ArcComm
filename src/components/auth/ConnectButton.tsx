@@ -3,8 +3,8 @@
 import { usePrivy } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { ArrowUpRight, Loader2, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Wallet } from 'lucide-react';
 
 export function ConnectButton() {
   const { ready, authenticated, login } = usePrivy();
@@ -18,26 +18,27 @@ export function ConnectButton() {
 
   if (!ready) {
     return (
-      <Button variant="arc" size="lg" disabled>
+      <Button variant="arc" size="xl" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Loading...
+        Loading wallet access
       </Button>
     );
   }
 
   if (authenticated) {
     return (
-      <Button variant="arc" size="lg" disabled>
+      <Button variant="arc" size="xl" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Redirecting...
+        Opening ArcComm
       </Button>
     );
   }
 
   return (
-    <Button variant="arc" size="lg" onClick={login} className="gap-2">
+    <Button variant="arc" size="xl" onClick={login} className="gap-2 px-7">
       <Wallet className="h-4 w-4" />
-      Connect Wallet
+      Connect wallet
+      <ArrowUpRight className="h-4 w-4" />
     </Button>
   );
 }

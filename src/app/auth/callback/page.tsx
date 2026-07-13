@@ -1,9 +1,9 @@
 'use client';
 
-import { usePrivy } from '@privy-io/react-auth';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { usePrivy } from '@privy-io/react-auth';
 
 export default function AuthCallbackPage() {
   const { authenticated, ready } = usePrivy();
@@ -20,8 +20,8 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center gap-3">
-      <Loader2 className="h-6 w-6 animate-spin text-arc-500" />
-      <p className="text-muted-foreground">Signing you in...</p>
+      <Loader2 className="h-6 w-6 animate-spin text-white/[0.70]" />
+      <p className="text-white/[0.58]">Signing you into ArcComm...</p>
     </div>
   );
 }

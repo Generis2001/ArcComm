@@ -1,14 +1,25 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { IBM_Plex_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  weight: ['400', '500'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
-  title: 'ArcCom — Creator monetization on Arc Testnet',
+  title: 'ArcComm — Creator revenue on Arc Testnet',
   description:
-    'Support creators and earn in USDC. Wallet-native subscriptions, exclusive content, and digital products on Arc Testnet.',
+    'ArcComm is a wallet-native creator platform for subscriptions, gated communities, and digital products settled in USDC on Arc Testnet.',
   icons: {
     icon: '/assets/logo.svg',
     shortcut: '/assets/logo.svg',
@@ -18,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${spaceGrotesk.variable} ${plexMono.variable} font-sans`}>
         <Providers>{children}</Providers>
       </body>
     </html>

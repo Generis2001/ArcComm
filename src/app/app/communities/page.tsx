@@ -1,10 +1,10 @@
 'use client';
 
-import { useCommunities } from '@/hooks/useCommunity';
-import { JoinButton } from '@/components/communities/JoinButton';
-import { Users2, Loader2 } from 'lucide-react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Loader2, Users2 } from 'lucide-react';
+import { JoinButton } from '@/components/communities/JoinButton';
+import { useCommunities } from '@/hooks/useCommunity';
 
 export default function CommunitiesPage() {
   const { data: communities, isLoading } = useCommunities();
@@ -14,22 +14,21 @@ export default function CommunitiesPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Communities</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Join subscriber communities and earn from revenue distributions.
-        </p>
+      <div className="space-y-2">
+        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Communities</p>
+        <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Membership rooms</h1>
+        <p className="text-sm text-white/[0.56]">Join subscriber communities and track where creator revenue unlocks conversation.</p>
       </div>
 
       {isLoading && (
         <div className="flex justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          <Loader2 className="h-6 w-6 animate-spin text-white/[0.56]" />
         </div>
       )}
 
       {!isLoading && joined.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Your Communities</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white/[0.42]">Your communities</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {joined.map((c) => (
               <CommunityCard key={c.id} community={c} />
@@ -40,7 +39,7 @@ export default function CommunitiesPage() {
 
       {!isLoading && discover.length > 0 && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Discover</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-white/[0.42]">Discover</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {discover.map((c) => (
               <CommunityCard key={c.id} community={c} />
@@ -50,44 +49,38 @@ export default function CommunitiesPage() {
       )}
 
       {!isLoading && communities?.length === 0 && (
-        <div className="flex flex-col items-center gap-3 py-16 text-center">
-          <Users2 className="h-10 w-10 text-muted-foreground" />
-          <p className="font-medium">No communities yet</p>
-          <p className="text-sm text-muted-foreground">
-            Creators can set up communities in their studio.
-          </p>
+        <div className="arc-panel flex flex-col items-center gap-3 py-16 text-center">
+          <Users2 className="h-10 w-10 text-white/[0.38]" />
+          <p className="font-medium text-white">No communities yet</p>
+          <p className="text-sm text-white/[0.54]">Creators can set up communities in their studio.</p>
         </div>
       )}
     </div>
   );
 }
 
-function CommunityCard({ community }: { community: ReturnType<typeof useCommunities>['data'] extends (infer T)[] | undefined ? T : never }) {
+function CommunityCard({
+  community,
+}: {
+  community: ReturnType<typeof useCommunities>['data'] extends (infer T)[] | undefined ? T : never;
+}) {
   if (!community) return null;
   return (
-    <div className="rounded-xl border border-border bg-card p-4 space-y-3 hover:border-arc-600/50 transition-colors">
-      <Link href={`/app/communities/${community.id}`} className="block space-y-2">
+    <div className="rounded-[1.4rem] border border-white/[0.10] bg-white/[0.03] p-4 transition-transform duration-200 hover:-translate-y-1">
+      <Link href={`/app/communities/${community.id}`} className="block space-y-3">
         <div className="flex items-center gap-2">
           {community.creator.user.avatarUrl ? (
-            <Image
-              src={community.creator.user.avatarUrl}
-              alt=""
-              width={28}
-              height={28}
-              className="rounded-full object-cover"
-            />
+            <Image src={community.creator.user.avatarUrl} alt="" width={28} height={28} className="rounded-full object-cover" />
           ) : (
-            <div className="h-7 w-7 rounded-full bg-arc-500/20 flex items-center justify-center text-xs font-bold text-arc-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full border border-white/[0.10] bg-white/[0.05] text-xs font-bold text-white/[0.72]">
               {community.creator.displayName[0]}
             </div>
           )}
-          <span className="text-xs text-muted-foreground">@{community.creator.handle}</span>
+          <span className="text-xs text-white/[0.48]">@{community.creator.handle}</span>
         </div>
-        <p className="font-semibold leading-tight">{community.name}</p>
-        {community.description && (
-          <p className="text-sm text-muted-foreground line-clamp-2">{community.description}</p>
-        )}
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+        <p className="font-semibold leading-tight text-white">{community.name}</p>
+        {community.description && <p className="line-clamp-2 text-sm text-white/[0.54]">{community.description}</p>}
+        <div className="flex items-center gap-3 text-xs text-white/[0.44]">
           <span className="flex items-center gap-1">
             <Users2 className="h-3.5 w-3.5" />
             {community.memberCount} members
@@ -95,12 +88,14 @@ function CommunityCard({ community }: { community: ReturnType<typeof useCommunit
           <span>{community.entryFeeFormatted} entry</span>
         </div>
       </Link>
-      <JoinButton
-        communityId={community.id}
-        creatorId={community.creator.id}
-        entryFeeUsdc={community.entryFeeUsdc}
-        entryFeeFormatted={community.entryFeeFormatted}
-      />
+      <div className="mt-4">
+        <JoinButton
+          communityId={community.id}
+          creatorId={community.creator.id}
+          entryFeeUsdc={community.entryFeeUsdc}
+          entryFeeFormatted={community.entryFeeFormatted}
+        />
+      </div>
     </div>
   );
 }

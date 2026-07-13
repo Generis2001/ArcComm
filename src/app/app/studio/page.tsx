@@ -1,12 +1,12 @@
 'use client';
 
+import Link from 'next/link';
+import { Loader2, PlusCircle } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { usePrivy } from '@privy-io/react-auth';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CreatorSetup } from '@/components/studio/CreatorSetup';
-import Link from 'next/link';
-import { PlusCircle, Loader2 } from 'lucide-react';
 
 export default function StudioHomePage() {
   const { getAccessToken } = usePrivy();
@@ -26,7 +26,7 @@ export default function StudioHomePage() {
   if (isLoading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <Loader2 className="h-6 w-6 animate-spin text-white/[0.58]" />
       </div>
     );
   }
@@ -37,62 +37,38 @@ export default function StudioHomePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <p className="text-muted-foreground text-sm">
-          Welcome back, <span className="text-foreground font-medium">@{me.creator.handle}</span>
-        </p>
+      <div className="arc-panel flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-sm text-white/[0.52]">Welcome back</p>
+          <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-white">@{me.creator.handle}</p>
+        </div>
         <Button variant="arc" size="sm" asChild>
           <Link href="/app/studio/content/new">
             <PlusCircle className="mr-2 h-4 w-4" />
-            New Content
+            New content
           </Link>
         </Button>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Earnings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Link href="/app/studio/earnings" className="text-sm text-arc-400 hover:underline">
-              View earnings →
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Content</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Link href="/app/studio/content" className="text-sm text-arc-400 hover:underline">
-              Manage content →
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Subscribers</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Link href="/app/studio/subscribers" className="text-sm text-arc-400 hover:underline">
-              View subscribers →
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">Analytics</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Link href="/app/studio/analytics" className="text-sm text-arc-400 hover:underline">
-              View analytics →
-            </Link>
-          </CardContent>
-        </Card>
+        {[
+          ['/app/studio/earnings', 'Earnings', 'Review routed USDC and creator withdrawals.'],
+          ['/app/studio/content', 'Content', 'Publish premium media and track gated inventory.'],
+          ['/app/studio/subscribers', 'Subscribers', 'Audit the people behind recurring support.'],
+          ['/app/studio/analytics', 'Analytics', 'Watch conversion and engagement signals.'],
+        ].map(([href, title, description]) => (
+          <Card key={href} className="border-white/[0.10] bg-white/[0.03]">
+            <CardHeader>
+              <CardTitle className="text-lg">{title}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm leading-6 text-white/[0.56]">{description}</p>
+              <Link href={href} className="text-sm text-white underline-offset-4 hover:underline">
+                Open panel
+              </Link>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

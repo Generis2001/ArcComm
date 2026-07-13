@@ -1,9 +1,9 @@
 'use client';
 
-import { usePrivy } from '@privy-io/react-auth';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { usePrivy } from '@privy-io/react-auth';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -22,7 +22,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-arc-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-white/[0.70]" />
       </div>
     );
   }
