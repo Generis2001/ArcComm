@@ -58,8 +58,18 @@ export function CreatorSetup() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? 'Failed to create profile');
+      if (avatarUrl) {
+        await fetch('/api/auth/me', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ avatarUrl }),
+        });
+      }
       setSuccess(true);
-      setTimeout(() => router.refresh(), 1500);
+      setTimeout(() => {
+        router.replace('/app');
+        router.refresh();
+      }, 900);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setSaving(false);
@@ -67,17 +77,18 @@ export function CreatorSetup() {
   };
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center p-6">
-      <Card className="w-full max-w-md">
+    <div className="arc-shell flex min-h-screen items-center justify-center p-6">
+      <Card className="w-full max-w-md border-white/[0.10] bg-black/[0.72]">
         <CardHeader className="text-center space-y-3">
           <div className="flex justify-center">
-            <div className="rounded-full bg-arc-500/10 p-4">
-              <Clapperboard className="h-8 w-8 text-arc-400" />
+            <div className="rounded-full border border-white/[0.10] bg-white/[0.05] p-4">
+              <Clapperboard className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle>Set Up Your Creator Profile</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Create your public profile to start publishing content and earning.
+          <CardTitle>Create your ArcComm profile</CardTitle>
+          <p className="text-sm text-white/[0.58]">
+            Complete this profile before entering ArcComm. It is used for your public creator page,
+            content, products, and communities.
           </p>
         </CardHeader>
         <CardContent>
@@ -88,16 +99,16 @@ export function CreatorSetup() {
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="relative group h-20 w-20 rounded-full overflow-hidden border-2 border-dashed border-input hover:border-arc-400 transition-colors bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="relative group h-20 w-20 rounded-full overflow-hidden border-2 border-dashed border-white/[0.16] bg-white/[0.03] transition-colors hover:border-white/[0.48] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 {avatarUrl ? (
                   <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
                     {uploading ? (
-                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                      <Loader2 className="h-5 w-5 animate-spin text-white/[0.56]" />
                     ) : (
-                      <Camera className="h-5 w-5 text-muted-foreground group-hover:text-arc-400 transition-colors" />
+                      <Camera className="h-5 w-5 text-white/[0.48] transition-colors group-hover:text-white" />
                     )}
                   </div>
                 )}
@@ -107,7 +118,7 @@ export function CreatorSetup() {
                   </div>
                 )}
               </button>
-              <p className="text-xs text-muted-foreground">Profile picture (optional, max 5 MB)</p>
+              <p className="text-xs text-white/[0.48]">Profile picture (optional, max 5 MB)</p>
               <input
                 ref={fileRef}
                 type="file"
@@ -119,8 +130,8 @@ export function CreatorSetup() {
 
             <div className="space-y-1.5">
               <label className="text-sm font-medium">Handle</label>
-              <div className="flex items-center rounded-md border border-input bg-background px-3 focus-within:ring-1 focus-within:ring-ring">
-                <span className="text-muted-foreground text-sm">@</span>
+              <div className="flex items-center rounded-md border border-white/[0.12] bg-black/[0.45] px-3 focus-within:ring-1 focus-within:ring-ring">
+                <span className="text-sm text-white/[0.48]">@</span>
                 <input
                   value={form.handle}
                   onChange={(e) => setForm({ ...form, handle: e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '') })}
@@ -128,10 +139,10 @@ export function CreatorSetup() {
                   required
                   minLength={3}
                   maxLength={32}
-                  className="flex-1 bg-transparent py-2 pl-1 text-sm outline-none placeholder:text-muted-foreground"
+                  className="flex-1 bg-transparent py-2 pl-1 text-sm outline-none placeholder:text-white/[0.34]"
                 />
               </div>
-              <p className="text-xs text-muted-foreground">Letters, numbers, _ and - only. Min 3 characters.</p>
+              <p className="text-xs text-white/[0.48]">Letters, numbers, _ and - only. Min 3 characters.</p>
             </div>
 
             <div className="space-y-1.5">
@@ -146,14 +157,14 @@ export function CreatorSetup() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Bio <span className="text-muted-foreground">(optional)</span></label>
+              <label className="text-sm font-medium">Bio <span className="text-white/[0.48]">(optional)</span></label>
               <textarea
                 value={form.bio}
                 onChange={(e) => setForm({ ...form, bio: e.target.value })}
                 placeholder="Tell people about yourself..."
                 rows={3}
                 maxLength={500}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
+                className="w-full resize-none rounded-md border border-white/[0.12] bg-black/[0.45] px-3 py-2 text-sm placeholder:text-white/[0.34] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
             </div>
 
@@ -162,9 +173,9 @@ export function CreatorSetup() {
             )}
 
             {success && (
-              <p className="text-sm text-green-400 rounded-md bg-green-500/10 px-3 py-2 flex items-center gap-2">
+              <p className="flex items-center gap-2 rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-400">
                 <CheckCircle2 className="h-4 w-4" />
-                Profile created successfully! Redirecting...
+                Profile created. Opening ArcComm...
               </p>
             )}
 

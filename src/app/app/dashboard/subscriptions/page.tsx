@@ -28,20 +28,31 @@ export default function SubscriptionsPage() {
   if (!data || data.length === 0) {
     return (
       <div className="space-y-4">
-        <h1 className="text-2xl font-bold">My Subscriptions</h1>
-        <p className="text-muted-foreground">
-          You have no active subscriptions.{' '}
-          <Link href="/app/explore" className="text-arc-400 hover:underline">
-            Explore creators
-          </Link>
-        </p>
+        <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="SUBSCRIPTIONS">
+          <div className="relative z-10 space-y-2">
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Subscriptions</p>
+            <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your recurring creator access.</h1>
+            <p className="text-sm text-white/[0.56]">
+              You have no active subscriptions.{' '}
+              <Link href="/app/explore" className="text-white underline-offset-4 hover:underline">
+                Explore creators
+              </Link>
+            </p>
+          </div>
+        </section>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">My Subscriptions</h1>
+      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="SUBSCRIPTIONS">
+        <div className="relative z-10 space-y-2">
+          <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Subscriptions</p>
+          <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your recurring creator access.</h1>
+          <p className="text-sm text-white/[0.56]">Review the subscriptions that currently unlock content and community access.</p>
+        </div>
+      </section>
 
       <div className="grid gap-4">
         {data.map((sub) => (

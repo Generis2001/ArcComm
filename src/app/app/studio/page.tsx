@@ -6,7 +6,6 @@ import { useQuery } from '@tanstack/react-query';
 import { usePrivy } from '@privy-io/react-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CreatorSetup } from '@/components/studio/CreatorSetup';
 
 export default function StudioHomePage() {
   const { getAccessToken } = usePrivy();
@@ -29,10 +28,6 @@ export default function StudioHomePage() {
         <Loader2 className="h-6 w-6 animate-spin text-white/[0.58]" />
       </div>
     );
-  }
-
-  if (!me?.creator) {
-    return <CreatorSetup />;
   }
 
   return (

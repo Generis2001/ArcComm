@@ -15,11 +15,13 @@ const studioNav = [
 export default function StudioLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Creator studio</p>
-        <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Manage your revenue surface</h1>
-        <p className="text-sm text-white/[0.56]">Content, products, communities, and subscriber operations in one control plane.</p>
-      </div>
+      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="STUDIO">
+        <div className="relative z-10 space-y-2">
+          <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Creator studio</p>
+          <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Manage your profile, content, products, and communities.</h1>
+          <p className="text-sm text-white/[0.56]">Use the studio to publish, price access, and manage creator activity on ArcComm.</p>
+        </div>
+      </section>
 
       <nav className="flex gap-2 overflow-x-auto rounded-full border border-white/[0.08] bg-white/[0.03] p-2">
         {studioNav.map((item) => (

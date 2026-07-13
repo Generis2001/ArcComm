@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { BookMarked, Clapperboard, Compass, LayoutDashboard, Store, Users2 } from 'lucide-react';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { ChainGuard } from '@/components/auth/ChainGuard';
+import { CreatorGuard } from '@/components/app/CreatorGuard';
 import { SidebarFooter } from '@/components/app/SidebarFooter';
 import { ArcSymbolBadge, ArcWordmark } from '@/components/ui/ArcBadge';
 import { LogoWordmark } from '@/components/ui/Logo';
@@ -19,65 +20,67 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthGuard>
       <ChainGuard>
-        <div className="arc-shell min-h-screen">
-          <div className="mx-auto flex min-h-screen max-w-[1500px]">
-            <aside className="sticky top-0 hidden h-screen w-[296px] shrink-0 border-r border-white/[0.08] bg-black/[0.45] px-5 py-6 md:flex md:flex-col">
-              <Link href="/app" className="block px-1">
-                <LogoWordmark size={28} />
-              </Link>
+        <CreatorGuard>
+          <div className="arc-shell min-h-screen">
+            <div className="mx-auto flex min-h-screen max-w-[1500px]">
+              <aside className="sticky top-0 hidden h-screen w-[296px] shrink-0 border-r border-white/[0.08] bg-black/[0.45] px-5 py-6 md:flex md:flex-col">
+                <Link href="/app" className="block px-1">
+                  <LogoWordmark size={28} />
+                </Link>
 
-              <div className="mt-8 rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] p-4">
-                <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.38]">ArcComm surface</p>
-                <p className="mt-3 text-sm leading-6 text-white/[0.68]">
-                  Creator subscriptions, gated access, and USDC settlement from one monochrome shell.
-                </p>
-              </div>
-
-              <nav className="mt-6 flex-1 space-y-1.5">
-                {navItems.map((item) => (
-                  <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} />
-                ))}
-              </nav>
-
-              <div className="space-y-4">
-                <div className="rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] px-4 py-3">
-                  <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/[0.38]">Built on</p>
-                  <div className="mt-2 flex items-center justify-between gap-3">
-                    <ArcWordmark className="h-4" />
-                    <ArcSymbolBadge className="h-8 w-8" />
-                  </div>
+                <div className="mt-8 rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] p-4">
+                  <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.38]">ArcComm app</p>
+                  <p className="mt-3 text-sm leading-6 text-white/[0.68]">
+                    Manage creator profiles, subscriptions, communities, and digital products on Arc Testnet.
+                  </p>
                 </div>
-                <SidebarFooter />
-              </div>
-            </aside>
 
-            <div className="flex min-h-screen flex-1 flex-col">
-              <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-black/[0.72] backdrop-blur-xl">
-                <div className="flex items-center justify-between gap-4 px-4 py-4 md:px-8">
-                  <div>
-                    <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/[0.36]">ArcComm Console</p>
-                    <p className="mt-1 text-sm text-white/[0.62]">Arc Testnet creator commerce in a cleaner control surface.</p>
-                  </div>
-                  <ArcSymbolBadge />
-                </div>
-                <div className="flex gap-2 overflow-x-auto px-4 pb-4 md:hidden">
+                <nav className="mt-6 flex-1 space-y-1.5">
                   {navItems.map((item) => (
-                    <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} mobile />
+                    <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} />
                   ))}
-                </div>
-              </header>
+                </nav>
 
-              <main className="flex-1 px-4 py-6 md:px-8 md:py-8">
-                <div className="mx-auto max-w-6xl">
-                  <div className="mb-6 md:hidden">
-                    <SidebarFooter compact />
+                <div className="space-y-4">
+                  <div className="rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] px-4 py-3">
+                    <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/[0.38]">Built on</p>
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <ArcWordmark className="h-4" />
+                      <ArcSymbolBadge className="h-8 w-8" />
+                    </div>
                   </div>
-                  {children}
+                  <SidebarFooter />
                 </div>
-              </main>
+              </aside>
+
+              <div className="flex min-h-screen flex-1 flex-col">
+                <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-black/[0.72] backdrop-blur-xl">
+                  <div className="flex items-center justify-between gap-4 px-4 py-4 md:px-8">
+                    <div>
+                      <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/[0.36]">ArcComm</p>
+                      <p className="mt-1 text-sm text-white/[0.62]">Subscriptions, access, and creator management on Arc Testnet.</p>
+                    </div>
+                    <ArcSymbolBadge />
+                  </div>
+                  <div className="flex gap-2 overflow-x-auto px-4 pb-4 md:hidden">
+                    {navItems.map((item) => (
+                      <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} mobile />
+                    ))}
+                  </div>
+                </header>
+
+                <main className="flex-1 px-4 py-6 md:px-8 md:py-8">
+                  <div className="mx-auto max-w-6xl">
+                    <div className="mb-6 md:hidden">
+                      <SidebarFooter compact />
+                    </div>
+                    {children}
+                  </div>
+                </main>
+              </div>
             </div>
           </div>
-        </div>
+        </CreatorGuard>
       </ChainGuard>
     </AuthGuard>
   );

@@ -126,15 +126,21 @@ export default function PurchasesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Purchases</h1>
-        <Button variant="arc" size="sm" asChild>
-          <Link href="/app/explore">
-            <Compass className="mr-2 h-4 w-4" />
-            Explore Creators
-          </Link>
-        </Button>
-      </div>
+      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="PURCHASES">
+        <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="space-y-2">
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Purchases</p>
+            <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Content and products you own.</h1>
+            <p className="text-sm text-white/[0.56]">Open paid content and downloads purchased from ArcComm creators.</p>
+          </div>
+          <Button variant="arc" size="sm" asChild>
+            <Link href="/app/explore">
+              <Compass className="mr-2 h-4 w-4" />
+              Explore creators
+            </Link>
+          </Button>
+        </div>
+      </section>
 
       {isLoading ? (
         <div className="flex justify-center py-16">

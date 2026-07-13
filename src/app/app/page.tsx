@@ -8,44 +8,44 @@ const quickActions = [
     href: '/app/explore',
     icon: Compass,
     title: 'Explore creators',
-    description: 'Scan active creator profiles, tiers, and premium content surfaces.',
+    description: 'Browse creator profiles, subscription tiers, and premium content.',
   },
   {
     href: '/app/dashboard/subscriptions',
     icon: BookMarked,
-    title: 'Manage subscriptions',
-    description: 'Track your recurring support and any gated access tied to it.',
+    title: 'Subscriptions',
+    description: 'Review your active subscriptions and the access they unlock.',
   },
   {
     href: '/app/studio',
     icon: Clapperboard,
-    title: 'Open creator studio',
-    description: 'Publish content, price access, and manage revenue operations.',
+    title: 'Creator studio',
+    description: 'Publish content, set prices, and manage your creator profile.',
   },
 ];
 
 export default function AppHomePage() {
   return (
     <div className="space-y-6">
-      <section className="arc-panel arc-watermark overflow-hidden p-6 md:p-8" data-watermark="CONTROL">
+      <section className="arc-panel arc-watermark overflow-hidden p-6 md:p-8" data-watermark="HOME">
         <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-4">
-            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Dashboard</p>
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">ArcComm home</p>
             <h1 className="text-3xl font-semibold tracking-[-0.06em] text-white md:text-5xl">
-              Welcome to ArcComm.
+              Manage subscriptions, access, and creator tools.
             </h1>
             <p className="arc-copy max-w-xl">
-              Support creators, unlock premium access, and operate creator revenue in a cleaner
-              black-and-white shell built for Arc Testnet.
+              Use ArcComm to follow creators, unlock paid content, join communities, or manage your
+              own profile and products on Arc Testnet.
             </p>
           </div>
 
           <div className="flex gap-3">
             <Button variant="outline" asChild>
-              <Link href="/app/communities">View communities</Link>
+              <Link href="/app/communities">Communities</Link>
             </Button>
             <Button variant="arc" asChild>
-              <Link href="/app/explore">Discover creators</Link>
+              <Link href="/app/explore">Explore creators</Link>
             </Button>
           </div>
         </div>
@@ -75,11 +75,11 @@ export default function AppHomePage() {
             <div className="mb-3 inline-flex w-fit rounded-full border border-white/[0.10] bg-white/[0.05] p-3">
               <TrendingUp className="h-5 w-5 text-white" />
             </div>
-            <CardTitle className="text-lg">Revenue posture</CardTitle>
+            <CardTitle className="text-lg">Your ArcComm account</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm leading-6 text-white/[0.58]">
-            <p>Subscriptions, communities, and store purchases all settle through the same ArcComm rail.</p>
-            <p>Use the creator studio when you want to turn your profile into a live monetization surface.</p>
+            <p>Use your wallet to subscribe, purchase access, and join creator communities.</p>
+            <p>Use the creator studio to publish content, set up products, and manage your profile.</p>
           </CardContent>
         </Card>
       </section>

@@ -14,11 +14,13 @@ export default function CommunitiesPage() {
 
   return (
     <div className="space-y-8">
-      <div className="space-y-2">
-        <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Communities</p>
-        <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Membership rooms</h1>
-        <p className="text-sm text-white/[0.56]">Join subscriber communities and track where creator revenue unlocks conversation.</p>
-      </div>
+      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="COMMUNITIES">
+        <div className="relative z-10 space-y-2">
+          <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Communities</p>
+          <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Join creator communities with paid access.</h1>
+          <p className="text-sm text-white/[0.56]">Find communities you already belong to or discover new creator spaces.</p>
+        </div>
+      </section>
 
       {isLoading && (
         <div className="flex justify-center py-12">

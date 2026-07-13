@@ -39,11 +39,9 @@
     @apply bg-background text-foreground antialiased;
     background-image:
       radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 28%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(225deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: auto, auto, 24px 24px, 24px 24px;
-    background-position: center top, center top, 0 0, 0 0;
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%);
+    background-size: auto, auto;
+    background-position: center top, center top;
   }
 
   ::selection {
@@ -83,19 +81,6 @@
       radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.08), transparent 28%),
       radial-gradient(circle at 85% 5%, rgba(255, 255, 255, 0.06), transparent 22%);
     opacity: 0.8;
-    z-index: -2;
-  }
-
-  .arc-shell::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 72px 72px;
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 92%);
     z-index: -1;
   }
 
@@ -124,11 +109,64 @@
     z-index: 0;
   }
 
-  .arc-kicker {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.04] px-4 py-1.5 text-[0.7rem] uppercase tracking-[0.24em] text-white/[0.72];
-  }
-
   .arc-copy {
     @apply text-sm leading-7 text-white/[0.64] md:text-base;
+  }
+
+  .orbit-path {
+    animation: orbit-spin 22s linear infinite;
+    transform-origin: center;
+  }
+
+  .earth-surface {
+    animation: earth-spin 18s linear infinite;
+    transform-origin: center;
+  }
+
+  .orbit-reverse {
+    animation-direction: reverse;
+    animation-duration: 28s;
+  }
+
+  .orbit-token {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(10, 10, 10, 0.72);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 12px 36px rgba(0, 0, 0, 0.4);
+  }
+
+  .orbit-token-a {
+    padding: 0.4rem;
+  }
+
+  .orbit-token-b {
+    padding: 0.38rem;
+  }
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes earth-spin {
+  from {
+    transform: translateX(-6%);
+  }
+  50% {
+    transform: translateX(6%);
+  }
+  to {
+    transform: translateX(-6%);
   }
 }
