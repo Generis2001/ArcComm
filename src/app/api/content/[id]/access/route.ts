@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { requireAuth } from '@/lib/privy/server';
 import { prisma } from '@/lib/db/client';
+import { getPremiumAccess } from '@/lib/access/premium';
 import { toApiError, NotFoundError } from '@/lib/utils/errors';
 
 interface RouteContext {
@@ -37,6 +38,18 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
 
     // Check subscription
     if (content.accessType === 'SUBSCRIPTION' || content.accessType === 'SUBSCRIPTION_OR_PURCHASE') {
+      if (content.accessType === 'SUBSCRIPTION') {
+        const premiumAccess = await getPremiumAccess(user.id, content.creatorId);
+        if (!premiumAccess.isEligible) {
+          return Response.json({
+            hasAccess: false,
+            reason: 'premium_requirement',
+            completedPeriods: premiumAccess.completedPeriods,
+            requiredPeriods: premiumAccess.requiredPeriods,
+          });
+        }
+      }
+
       const tierIds = content.accessRules
         .filter((r) => r.tierId)
         .map((r) => r.tierId!);

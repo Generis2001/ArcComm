@@ -18,7 +18,9 @@ export function CreatorCard({ creator }: CreatorCardProps) {
     .sort((a, b) => Number(BigInt(a.priceUsdc) - BigInt(b.priceUsdc)))[0];
 
   const contentPreview = creator.content?.slice(0, 3) ?? [];
-  const featuredVideo = contentPreview.find((item) => item.type === 'VIDEO' && item.mediaUrl);
+  const featuredVideo = contentPreview.find(
+    (item) => item.type === 'VIDEO' && item.mediaUrl && item.accessType !== 'SUBSCRIPTION',
+  );
 
   return (
     <div className="overflow-hidden rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] transition-transform duration-200 hover:-translate-y-1">
@@ -69,6 +71,10 @@ export function CreatorCard({ creator }: CreatorCardProps) {
                 </div>
                 {item.isFree ? (
                   <span className="shrink-0 text-emerald-300">Free</span>
+                ) : item.accessType === 'SUBSCRIPTION' ? (
+                  <Badge variant="outline" className="shrink-0 border-amber-400/30 px-1 py-0 text-[10px] text-amber-300">
+                    Premium
+                  </Badge>
                 ) : item.priceUsdc ? (
                   <span className="shrink-0 font-medium text-white/[0.84]">{formatUsdc(BigInt(item.priceUsdc))}</span>
                 ) : (

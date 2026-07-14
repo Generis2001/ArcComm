@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db/client';
 import { SubscriptionTiers } from '@/components/creator/SubscriptionTiers';
-import { SubscriptionGate } from '@/components/creator/SubscriptionGate';
+import { PremiumContentSection } from '@/components/creator/PremiumContentSection';
 import { BuyButton } from '@/components/payments/BuyButton';
 import { BadgeCheck, FileText, ShoppingBag, TrendingUp, Download, Music, Film, Image as ImageIcon } from 'lucide-react';
 import { formatUsdc } from '@/lib/payments/usdc';
@@ -100,7 +100,10 @@ export default async function CreatorProfilePage({ params }: PageProps) {
   const totalViews = creator.content.reduce((sum, c) => sum + c.views, 0);
   const netValue = computeNetValue(BigInt(creator.totalEarned), totalViews);
 
-  const purchasableContent = creator.content.filter((c) => !c.isFree && c.priceUsdc);
+  const premiumContent = creator.content.filter((c) => !c.isFree && c.accessType === 'SUBSCRIPTION');
+  const purchasableContent = creator.content.filter(
+    (c) => !c.isFree && c.accessType !== 'SUBSCRIPTION' && c.priceUsdc,
+  );
   const freeContent = creator.content.filter((c) => c.isFree);
 
   return (
@@ -136,9 +139,6 @@ export default async function CreatorProfilePage({ params }: PageProps) {
 
       {/* Subscription tiers */}
       <SubscriptionTiers creator={creator} />
-
-      {/* Content + Products — gated behind subscription */}
-      <SubscriptionGate creatorId={creator.id} tiers={creator.subscriptionTiers}>
 
       {/* Purchasable content */}
       {purchasableContent.length > 0 && (
@@ -205,6 +205,15 @@ export default async function CreatorProfilePage({ params }: PageProps) {
         </section>
       )}
 
+      {premiumContent.length > 0 && (
+        <PremiumContentSection
+          creatorId={creator.id}
+          creatorHandle={creator.handle}
+          content={premiumContent}
+          tiers={creator.subscriptionTiers}
+        />
+      )}
+
       {/* Products */}
       {creator.products.length > 0 && (
         <section className="space-y-4">
@@ -245,7 +254,6 @@ export default async function CreatorProfilePage({ params }: PageProps) {
         </section>
       )}
 
-      </SubscriptionGate>
     </div>
   );
 }

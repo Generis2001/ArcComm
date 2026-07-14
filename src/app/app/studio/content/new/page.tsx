@@ -390,7 +390,7 @@ export default function NewContentPage() {
                 className="h-4 w-4 rounded border-input"
               />
               <label htmlFor="isPremium" className="text-sm font-medium cursor-pointer">
-                Premium content (subscribers only)
+                Premium content (unlocks after three paid 30-day access periods)
               </label>
             </div>
 
