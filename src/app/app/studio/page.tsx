@@ -49,7 +49,7 @@ export default function StudioHomePage() {
         {[
           ['/app/studio/earnings', 'Earnings', 'Review routed USDC and creator withdrawals.'],
           ['/app/studio/content', 'Content', 'Publish premium media and track gated inventory.'],
-          ['/app/studio/subscribers', 'Subscribers', 'Audit the people behind recurring support.'],
+          ['/app/studio/subscribers', 'Subscribers', 'Review active subscriber access periods.'],
           ['/app/studio/analytics', 'Analytics', 'Watch conversion and engagement signals.'],
         ].map(([href, title, description]) => (
           <Card key={href} className="border-white/[0.10] bg-white/[0.03]">

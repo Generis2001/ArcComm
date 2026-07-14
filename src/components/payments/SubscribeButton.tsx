@@ -41,14 +41,14 @@ export function SubscribeButton({ creatorId, tier, size = 'default' }: Subscribe
   return (
     <>
       <Button variant="arc" size={size} className="w-full" onClick={() => setOpen(true)}>
-        Subscribe · {formatUsdc(BigInt(tier.priceUsdc))}/mo
+        Subscribe · {formatUsdc(BigInt(tier.priceUsdc))} / {tier.intervalDays}d
       </Button>
 
       <PayModal
         open={open}
         onOpenChange={setOpen}
         title={`Subscribe to ${tier.name}`}
-        description={`${tier.intervalDays}-day billing cycle · ${formatUsdc(BigInt(tier.priceUsdc))} USDC`}
+        description={`${tier.intervalDays}-day access period · ${formatUsdc(BigInt(tier.priceUsdc))}`}
         grossAmountUsdc={BigInt(tier.priceUsdc)}
         payParams={{
           creatorId,

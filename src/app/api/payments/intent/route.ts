@@ -48,11 +48,23 @@ export async function POST(req: NextRequest) {
       if (!input.contentId) throw new PaymentError('contentId required');
       const content = await prisma.content.findUnique({ where: { id: input.contentId } });
       if (!content || !content.priceUsdc) throw new NotFoundError('Content');
+      if (content.creatorId !== creator.id) throw new PaymentError('Content does not belong to creator');
+      const existing = await prisma.purchase.findFirst({
+        where: { userId: user.id, contentId: content.id },
+        select: { id: true },
+      });
+      if (existing) throw new PaymentError('Content already purchased');
       grossAmountUsdc = content.priceUsdc;
     } else if (input.type === 'PRODUCT_PURCHASE') {
       if (!input.productId) throw new PaymentError('productId required');
       const product = await prisma.product.findUnique({ where: { id: input.productId } });
       if (!product || !product.isActive) throw new NotFoundError('Product');
+      if (product.creatorId !== creator.id) throw new PaymentError('Product does not belong to creator');
+      const existing = await prisma.purchase.findFirst({
+        where: { userId: user.id, productId: product.id },
+        select: { id: true },
+      });
+      if (existing) throw new PaymentError('Product already purchased');
       grossAmountUsdc = product.priceUsdc;
     } else if (input.type === 'COMMUNITY_JOIN') {
       const community = await prisma.community.findUnique({ where: { id: input.communityId! } });

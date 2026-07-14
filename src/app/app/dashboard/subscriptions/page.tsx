@@ -31,7 +31,7 @@ export default function SubscriptionsPage() {
         <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="SUBSCRIPTIONS">
           <div className="relative z-10 space-y-2">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Subscriptions</p>
-            <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your recurring creator access.</h1>
+            <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your creator access periods.</h1>
             <p className="text-sm text-white/[0.56]">
               You have no active subscriptions.{' '}
               <Link href="/app/explore" className="text-white underline-offset-4 hover:underline">
@@ -49,7 +49,7 @@ export default function SubscriptionsPage() {
       <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="SUBSCRIPTIONS">
         <div className="relative z-10 space-y-2">
           <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Subscriptions</p>
-          <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your recurring creator access.</h1>
+          <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Your creator access periods.</h1>
           <p className="text-sm text-white/[0.56]">Review the subscriptions that currently unlock content and community access.</p>
         </div>
       </section>
@@ -76,7 +76,7 @@ export default function SubscriptionsPage() {
                 {formatUsdc(BigInt(sub.tier.priceUsdc))} / {sub.tier.intervalDays}d
               </p>
               <p>
-                Renews: {new Date(sub.currentPeriodEnd).toLocaleDateString()}
+                Access ends: {new Date(sub.currentPeriodEnd).toLocaleDateString()}
               </p>
             </CardContent>
           </Card>

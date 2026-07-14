@@ -36,49 +36,61 @@ export async function POST(req: NextRequest) {
 
     // Create Purchase record + credit creator balance immediately as settled
     if (payment.type === 'CONTENT_PURCHASE' && contentId) {
-      await prisma.$transaction([
-        prisma.purchase.create({
-          data: {
-            userId: user.id,
-            contentId,
-            paymentId: dbPaymentId,
-            amountUsdc: payment.grossAmountUsdc,
-          },
-        }),
-        prisma.content.update({
-          where: { id: contentId },
-          data: { views: { increment: 1 } },
-        }),
-        prisma.creator.update({
-          where: { id: payment.toCreatorId },
-          data: {
-            totalEarned: { increment: payment.netAmountUsdc },
-            settledBalance: { increment: payment.netAmountUsdc },
-          },
-        }),
-      ]);
+      const existing = await prisma.purchase.findFirst({
+        where: { userId: user.id, contentId },
+        select: { id: true },
+      });
+      if (!existing) {
+        await prisma.$transaction([
+          prisma.purchase.create({
+            data: {
+              userId: user.id,
+              contentId,
+              paymentId: dbPaymentId,
+              amountUsdc: payment.grossAmountUsdc,
+            },
+          }),
+          prisma.content.update({
+            where: { id: contentId },
+            data: { views: { increment: 1 } },
+          }),
+          prisma.creator.update({
+            where: { id: payment.toCreatorId },
+            data: {
+              totalEarned: { increment: payment.netAmountUsdc },
+              settledBalance: { increment: payment.netAmountUsdc },
+            },
+          }),
+        ]);
+      }
     } else if (payment.type === 'PRODUCT_PURCHASE' && productId) {
-      await prisma.$transaction([
-        prisma.purchase.create({
-          data: {
-            userId: user.id,
-            productId,
-            paymentId: dbPaymentId,
-            amountUsdc: payment.grossAmountUsdc,
-          },
-        }),
-        prisma.product.update({
-          where: { id: productId },
-          data: { totalSold: { increment: 1 } },
-        }),
-        prisma.creator.update({
-          where: { id: payment.toCreatorId },
-          data: {
-            totalEarned: { increment: payment.netAmountUsdc },
-            settledBalance: { increment: payment.netAmountUsdc },
-          },
-        }),
-      ]);
+      const existing = await prisma.purchase.findFirst({
+        where: { userId: user.id, productId },
+        select: { id: true },
+      });
+      if (!existing) {
+        await prisma.$transaction([
+          prisma.purchase.create({
+            data: {
+              userId: user.id,
+              productId,
+              paymentId: dbPaymentId,
+              amountUsdc: payment.grossAmountUsdc,
+            },
+          }),
+          prisma.product.update({
+            where: { id: productId },
+            data: { totalSold: { increment: 1 } },
+          }),
+          prisma.creator.update({
+            where: { id: payment.toCreatorId },
+            data: {
+              totalEarned: { increment: payment.netAmountUsdc },
+              settledBalance: { increment: payment.netAmountUsdc },
+            },
+          }),
+        ]);
+      }
     } else if (payment.type === 'SUBSCRIPTION_INITIAL' || payment.type === 'SUBSCRIPTION_RENEWAL') {
       await prisma.$transaction(async (tx) => {
         await tx.creator.update({
@@ -89,33 +101,49 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        if (tierId && payment.type === 'SUBSCRIPTION_INITIAL') {
+        if (tierId) {
           const tier = await tx.subscriptionTier.findUnique({ where: { id: tierId } });
-          if (tier) {
-            const now = new Date();
-            const periodEnd = new Date(now.getTime() + tier.intervalDays * 86_400_000);
-            await tx.subscription.upsert({
-              where: { userId_tierId: { userId: user.id, tierId } },
-              create: {
-                userId: user.id,
-                creatorId: payment.toCreatorId,
-                tierId,
-                status: 'ACTIVE',
-                txHash,
-                startedAt: now,
-                currentPeriodStart: now,
-                currentPeriodEnd: periodEnd,
-                renewalCount: 0,
-              },
-              update: {
-                status: 'ACTIVE',
-                txHash,
-                currentPeriodStart: now,
-                currentPeriodEnd: periodEnd,
-                renewalCount: { increment: 1 },
-              },
-            });
+          if (!tier || tier.creatorId !== payment.toCreatorId) {
+            throw new NotFoundError('Subscription tier');
           }
+
+          const now = new Date();
+          const existing = await tx.subscription.findUnique({
+            where: { userId_tierId: { userId: user.id, tierId } },
+            select: { currentPeriodEnd: true },
+          });
+          // Early renewals extend the existing access period instead of discarding unused days.
+          const periodStart = existing?.currentPeriodEnd && existing.currentPeriodEnd > now
+            ? existing.currentPeriodEnd
+            : now;
+          const periodEnd = new Date(periodStart.getTime() + tier.intervalDays * 86_400_000);
+
+          const subscription = await tx.subscription.upsert({
+            where: { userId_tierId: { userId: user.id, tierId } },
+            create: {
+              userId: user.id,
+              creatorId: payment.toCreatorId,
+              tierId,
+              status: 'ACTIVE',
+              txHash,
+              startedAt: periodStart,
+              currentPeriodStart: periodStart,
+              currentPeriodEnd: periodEnd,
+              renewalCount: 0,
+            },
+            update: {
+              status: 'ACTIVE',
+              txHash,
+              currentPeriodStart: periodStart,
+              currentPeriodEnd: periodEnd,
+              renewalCount: { increment: 1 },
+            },
+          });
+
+          await tx.payment.update({
+            where: { id: dbPaymentId },
+            data: { subscriptionId: subscription.id },
+          });
         }
       });
     } else if (payment.type === 'COMMUNITY_JOIN' && communityId) {

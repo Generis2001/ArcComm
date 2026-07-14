@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { BadgeCheck, FileText } from 'lucide-react';
+import { BadgeCheck, FileText, Film } from 'lucide-react';
 import { SubscribeButton } from '@/components/payments/SubscribeButton';
 import { Badge } from '@/components/ui/badge';
 import { formatUsdc } from '@/lib/payments/usdc';
@@ -18,6 +18,7 @@ export function CreatorCard({ creator }: CreatorCardProps) {
     .sort((a, b) => Number(BigInt(a.priceUsdc) - BigInt(b.priceUsdc)))[0];
 
   const contentPreview = creator.content?.slice(0, 3) ?? [];
+  const featuredVideo = contentPreview.find((item) => item.type === 'VIDEO' && item.mediaUrl);
 
   return (
     <div className="overflow-hidden rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] transition-transform duration-200 hover:-translate-y-1">
@@ -42,12 +43,28 @@ export function CreatorCard({ creator }: CreatorCardProps) {
 
         {creator.bio && <p className="line-clamp-2 text-sm text-white/[0.56]">{creator.bio}</p>}
 
+        {featuredVideo?.mediaUrl && (
+          <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-black">
+            <video
+              src={featuredVideo.mediaUrl}
+              controls
+              playsInline
+              preload="metadata"
+              className="aspect-video w-full"
+            />
+          </div>
+        )}
+
         {contentPreview.length > 0 && (
           <div className="space-y-1.5 pt-0.5">
             {contentPreview.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-2 text-xs">
                 <div className="flex min-w-0 items-center gap-1.5">
-                  <FileText className="h-3 w-3 shrink-0 text-white/[0.34]" />
+                  {item.type === 'VIDEO' ? (
+                    <Film className="h-3 w-3 shrink-0 text-white/[0.34]" />
+                  ) : (
+                    <FileText className="h-3 w-3 shrink-0 text-white/[0.34]" />
+                  )}
                   <span className="truncate text-white/[0.52]">{item.title}</span>
                 </div>
                 {item.isFree ? (

@@ -13,7 +13,7 @@ const highlights = [
 export function Hero({ stats }: { stats: LandingStats }) {
   return (
     <section className="relative overflow-hidden px-6 pt-28 text-left">
-      <div className="mx-auto grid min-h-screen max-w-6xl gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_520px] lg:grid-rows-[auto_auto] lg:items-start">
+      <div className="mx-auto grid max-w-6xl gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(320px,460px)] lg:grid-rows-[auto_auto] lg:items-start">
         <div className="relative z-10 max-w-3xl space-y-8">
           <p className="text-sm uppercase tracking-[0.26em] text-white/[0.54]">
             Creator platform on Arc Testnet
@@ -54,11 +54,11 @@ export function Hero({ stats }: { stats: LandingStats }) {
 
         </div>
 
-        <div className="relative z-10 self-start lg:-mt-12 lg:justify-self-end">
+        <div className="relative z-10 w-full max-w-[460px] self-start justify-self-center lg:justify-self-end">
           <OrbitGraphic />
         </div>
 
-        <div className="relative z-10 grid gap-4 sm:grid-cols-3 lg:col-span-2 lg:-mt-6">
+        <div className="relative z-10 grid gap-4 sm:grid-cols-3 lg:col-span-2">
           <div className="arc-panel p-4">
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Creator heartbeat</p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorHeartbeat}</p>

@@ -95,7 +95,7 @@ export function FeatureGrid() {
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">Who ArcComm is for</p>
             <div className="mt-5 space-y-4">
               {[
-                'Creators who want recurring subscription revenue in USDC.',
+                'Creators who want paid subscriber access in USDC.',
                 'Communities that need wallet-based paid access on Arc Testnet.',
                 'Fans who want one wallet flow for subscriptions, content, and products.',
               ].map((item) => (

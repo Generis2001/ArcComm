@@ -2,6 +2,8 @@ import { CreatorCard } from '@/components/creator/CreatorCard';
 import { prisma } from '@/lib/db/client';
 import type { ContentItem, CreatorProfile } from '@/types/creator';
 
+export const dynamic = 'force-dynamic';
+
 const DEFAULT_TIER_PRICE = 500_000n;
 const DEFAULT_TIER_INTERVAL = 30;
 

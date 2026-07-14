@@ -60,7 +60,7 @@ export default function StudioSubscribersPage() {
               </CardHeader>
               <CardContent className="text-xs text-muted-foreground">
                 <p>Plan: <span className="text-foreground">{sub.tier.name}</span></p>
-                <p>Renews: {new Date(sub.currentPeriodEnd).toLocaleDateString()}</p>
+                <p>Access ends: {new Date(sub.currentPeriodEnd).toLocaleDateString()}</p>
               </CardContent>
             </Card>
           ))}

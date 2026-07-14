@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
         },
         product: {
           select: {
+            id: true,
             name: true,
             creator: { select: { handle: true, displayName: true } },
           },
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest) {
             }
           : undefined,
         product: p.product
-          ? { name: p.product.name, creator: p.product.creator }
+          ? { id: p.product.id, name: p.product.name, creator: p.product.creator }
           : undefined,
       })),
     );
