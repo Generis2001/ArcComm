@@ -51,7 +51,6 @@ export default function StudioProfilePage() {
       const blob = await upload(file.name, file, {
         access: 'public',
         handleUploadUrl: uploadUrl,
-        multipart: true,
         clientPayload: token ?? '',
       });
       // Save the URL to the DB

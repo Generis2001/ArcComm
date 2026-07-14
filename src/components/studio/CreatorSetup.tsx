@@ -1,21 +1,19 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
+import { upload } from '@vercel/blob/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Clapperboard, Camera, CheckCircle2 } from 'lucide-react';
+import { Loader2, Clapperboard, Camera } from 'lucide-react';
 import Image from 'next/image';
 
 export function CreatorSetup() {
-  const router = useRouter();
   const { getAccessToken } = usePrivy();
   const [form, setForm] = useState({ handle: '', displayName: '', bio: '' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -27,16 +25,12 @@ export function CreatorSetup() {
     setError('');
     try {
       const token = await getAccessToken();
-      const fd = new FormData();
-      fd.append('file', file);
-      const res = await fetch('/api/upload/avatar', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload/avatar',
+        clientPayload: token ?? '',
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Upload failed');
-      setAvatarUrl(data.url);
+      setAvatarUrl(blob.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
@@ -48,7 +42,6 @@ export function CreatorSetup() {
     e.preventDefault();
     setSaving(true);
     setError('');
-    setSuccess(false);
     try {
       const token = await getAccessToken();
       const res = await fetch('/api/creators', {
@@ -56,22 +49,24 @@ export function CreatorSetup() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? 'Failed to create profile');
+      const creator = await res.json();
+      if (!res.ok) throw new Error(creator.error ?? 'Failed to create profile');
+
       if (avatarUrl) {
-        await fetch('/api/auth/me', {
+        const avatarRes = await fetch('/api/auth/me', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ avatarUrl }),
         });
+        const avatarData = await avatarRes.json();
+        if (!avatarRes.ok) throw new Error(avatarData.error ?? 'Failed to save profile picture');
       }
-      setSuccess(true);
-      setTimeout(() => {
-        router.replace('/app');
-        router.refresh();
-      }, 900);
+
+      window.location.assign('/app');
+      return;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
       setSaving(false);
     }
   };
@@ -172,16 +167,9 @@ export function CreatorSetup() {
               <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
 
-            {success && (
-              <p className="flex items-center gap-2 rounded-md bg-green-500/10 px-3 py-2 text-sm text-green-400">
-                <CheckCircle2 className="h-4 w-4" />
-                Profile created. Opening ArcComm...
-              </p>
-            )}
-
-            <Button type="submit" variant="arc" className="w-full" disabled={saving || uploading || success}>
+            <Button type="submit" variant="arc" className="w-full" disabled={saving || uploading}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {success ? 'Profile Created!' : 'Create Profile'}
+              {saving ? 'Creating Profile...' : 'Create Profile'}
             </Button>
           </form>
         </CardContent>
