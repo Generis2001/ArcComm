@@ -1,14 +1,8 @@
 import Link from 'next/link';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { ConnectButton } from '@/components/auth/ConnectButton';
 import { OrbitGraphic } from '@/components/ui/OrbitGraphic';
 import type { LandingStats } from '@/lib/landing/stats';
-
-const highlights = [
-  'Creator profiles for publishing and monetization',
-  'USDC payments for subscriptions and one-time purchases',
-  'Subscriber communities and gated digital access',
-];
 
 export function Hero({ stats }: { stats: LandingStats }) {
   return (
@@ -39,17 +33,6 @@ export function Hero({ stats }: { stats: LandingStats }) {
               See what ArcComm does
               <ArrowUpRight className="h-4 w-4" />
             </Link>
-          </div>
-
-          <div className="grid gap-3">
-            {highlights.map((item) => (
-              <div key={item} className="flex items-start gap-3 rounded-[1.2rem] border border-white/[0.08] bg-white/[0.03] px-4 py-4">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/[0.10]">
-                  <Check className="h-3.5 w-3.5 text-white/[0.72]" />
-                </span>
-                <p className="text-sm leading-6 text-white/[0.62]">{item}</p>
-              </div>
-            ))}
           </div>
 
         </div>
