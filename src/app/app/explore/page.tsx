@@ -1,4 +1,4 @@
-import { CreatorCard } from '@/components/creator/CreatorCard';
+import { ExploreCreators } from '@/components/creator/ExploreCreators';
 import { prisma } from '@/lib/db/client';
 import type { ContentItem, CreatorProfile } from '@/types/creator';
 
@@ -38,7 +38,7 @@ async function getCreators(): Promise<CreatorProfile[]> {
       content: {
         where: { isPublished: true },
         orderBy: { createdAt: 'desc' },
-        take: 3,
+        take: 50,
         include: { _count: { select: { purchases: true } } },
       },
     },
@@ -124,11 +124,7 @@ export default async function ExplorePage() {
           No creators yet. Be the first to publish content.
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {creators.map((creator) => (
-            <CreatorCard key={creator.id} creator={creator} />
-          ))}
-        </div>
+        <ExploreCreators creators={creators} />
       )}
     </div>
   );

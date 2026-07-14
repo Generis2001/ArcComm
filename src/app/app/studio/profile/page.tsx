@@ -1,18 +1,28 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePrivy } from '@privy-io/react-auth';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { upload } from '@vercel/blob/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Camera, ImagePlus, ArrowLeft } from 'lucide-react';
+import { Loader2, Camera, ImagePlus, ArrowLeft, AlertTriangle, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function StudioProfilePage() {
-  const { getAccessToken } = usePrivy();
+  const { getAccessToken, logout } = usePrivy();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const avatarFileRef = useRef<HTMLInputElement>(null);
   const bannerFileRef = useRef<HTMLInputElement>(null);
@@ -33,6 +43,10 @@ export default function StudioProfilePage() {
   const [uploadingBanner, setUploadingBanner] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState('');
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   const currentForm = form ?? { displayName: me?.creator?.displayName ?? '', bio: me?.creator?.bio ?? '' };
 
@@ -92,6 +106,33 @@ export default function StudioProfilePage() {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (deleteConfirmation !== 'DELETE') return;
+
+    setDeleting(true);
+    setDeleteError('');
+
+    try {
+      const token = await getAccessToken();
+      const response = await fetch('/api/auth/account', {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json().catch(() => null);
+      if (!response.ok) throw new Error(data?.error ?? 'Unable to delete your account');
+
+      queryClient.clear();
+      await logout();
+      router.replace('/');
+      router.refresh();
+      window.setTimeout(() => window.location.assign('/'), 100);
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Unable to delete your account');
+      setDeleting(false);
     }
   };
 
@@ -259,6 +300,85 @@ export default function StudioProfilePage() {
           </form>
         </CardContent>
       </Card>
+
+      <Card className="border-destructive/35 bg-destructive/[0.04]">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base text-destructive">
+            <AlertTriangle className="h-4 w-4" />
+            Danger Zone
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-medium">Delete ArcComm account</p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              Permanently deletes your profile, creator content, purchases, and account data.
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="destructive"
+            className="shrink-0"
+            onClick={() => {
+              setDeleteError('');
+              setDeleteDialogOpen(true);
+            }}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete Account
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) {
+            setDeleteConfirmation('');
+            setDeleteError('');
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete your ArcComm account?</DialogTitle>
+            <DialogDescription>
+              This permanently removes your profile, creator content, purchases, and connected ArcComm account. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleDeleteAccount} className="space-y-4">
+            <div className="space-y-1.5">
+              <label htmlFor="delete-confirmation" className="text-sm font-medium">
+                Type <span className="font-mono">DELETE</span> to confirm
+              </label>
+              <Input
+                id="delete-confirmation"
+                value={deleteConfirmation}
+                onChange={(event) => setDeleteConfirmation(event.target.value)}
+                placeholder="DELETE"
+                autoComplete="off"
+                disabled={deleting}
+              />
+            </div>
+            {deleteError && <p className="rounded-md bg-destructive/[0.10] px-3 py-2 text-sm text-destructive">{deleteError}</p>}
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDeleteDialogOpen(false)}
+                disabled={deleting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="destructive" disabled={deleting || deleteConfirmation !== 'DELETE'}>
+                {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Delete Account
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

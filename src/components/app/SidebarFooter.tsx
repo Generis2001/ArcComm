@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
 import { useDisconnect } from 'wagmi';
-import { Loader2, LogOut, Wallet } from 'lucide-react';
+import { Check, Copy, Loader2, LogOut, Wallet } from 'lucide-react';
 import { USDCBalance } from '@/components/payments/USDCBalance';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils/cn';
@@ -14,6 +14,7 @@ export function SidebarFooter({ compact = false }: { compact?: boolean }) {
   const { disconnectAsync } = useDisconnect();
   const router = useRouter();
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const [copied, setCopied] = useState(false);
   const walletAddress = user?.wallet?.address;
 
   const shortAddress = walletAddress
@@ -36,6 +37,18 @@ export function SidebarFooter({ compact = false }: { compact?: boolean }) {
     }
   };
 
+  const copyWalletAddress = async () => {
+    if (!walletAddress) return;
+
+    try {
+      await navigator.clipboard.writeText(walletAddress);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return (
     <div className={cn('space-y-3 rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] p-4', compact && 'p-3')}>
       <div className="flex items-center justify-between gap-3">
@@ -46,9 +59,16 @@ export function SidebarFooter({ compact = false }: { compact?: boolean }) {
           </div>
         </div>
         {shortAddress && (
-          <div className="rounded-full border border-white/[0.10] px-3 py-1 font-mono text-[11px] text-white/[0.58]">
+          <button
+            type="button"
+            onClick={copyWalletAddress}
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.10] px-3 py-1 font-mono text-[11px] text-white/[0.58] transition-colors hover:border-white/[0.20] hover:bg-white/[0.06] hover:text-white"
+            title="Copy wallet address"
+            aria-label={copied ? 'Wallet address copied' : 'Copy wallet address'}
+          >
             {shortAddress}
-          </div>
+            {copied ? <Check className="h-3 w-3 text-emerald-300" /> : <Copy className="h-3 w-3" />}
+          </button>
         )}
       </div>
 

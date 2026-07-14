@@ -19,7 +19,7 @@ export function ArcSymbolBadge({ className }: { className?: string }) {
 export function ArcWordmark({ className }: { className?: string }) {
   return (
     <img
-      src="/assets/arc-doc-logo-white.svg"
+      src="/assets/arc-logo-white.svg"
       alt="Arc"
       className={cn('h-5 w-auto opacity-90', className)}
     />
