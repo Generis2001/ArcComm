@@ -9,7 +9,7 @@ const productFeatures = [
   {
     icon: CreditCard,
     title: 'Subscriptions in USDC',
-    description: 'Fans subscribe with USDC on Arc Testnet and ArcComm tracks access based on the active subscription state.',
+    description: 'Fans subscribe with USDC on Arc Testnet and Arcom tracks access based on the active subscription state.',
   },
   {
     icon: LockKeyhole,
@@ -19,7 +19,7 @@ const productFeatures = [
   {
     icon: Users2,
     title: 'Paid communities',
-    description: 'ArcComm lets creators open subscriber communities with entry fees and member-only participation.',
+    description: 'Arcom lets creators open subscriber communities with entry fees and member-only participation.',
   },
   {
     icon: ShoppingBag,
@@ -31,7 +31,7 @@ const productFeatures = [
 const workflow = [
   'Connect a wallet and create a creator profile.',
   'Set up subscriptions, community access, content, or digital products.',
-  'Receive USDC payments and manage fans from the ArcComm app.',
+  'Receive USDC payments and manage fans from the Arcom app.',
 ];
 
 export function FeatureGrid() {
@@ -41,9 +41,9 @@ export function FeatureGrid() {
         <section id="product" className="arc-panel arc-watermark overflow-hidden p-6 md:p-8" data-watermark="PRODUCT">
           <div className="relative z-10 space-y-8">
             <div className="max-w-3xl space-y-4">
-              <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">What ArcComm does</p>
+              <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">What Arcom does</p>
               <h2 className="text-3xl font-semibold tracking-[-0.06em] text-white md:text-5xl">
-                ArcComm gives creators one place to publish, charge, and manage access.
+                Arcom gives creators one place to publish, charge, and manage access.
               </h2>
               <p className="arc-copy max-w-2xl">
                 The platform combines creator onboarding, paid content, subscriptions, digital
@@ -74,7 +74,7 @@ export function FeatureGrid() {
               <div className="space-y-3">
                 <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">How it works</p>
                 <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">
-                  ArcComm connects wallet payments directly to creator access.
+                  Arcom connects wallet payments directly to creator access.
                 </h3>
               </div>
 
@@ -92,7 +92,7 @@ export function FeatureGrid() {
           </div>
 
           <div id="workflow" className="arc-panel p-6 md:p-8">
-            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">Who ArcComm is for</p>
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">Who Arcom is for</p>
             <div className="mt-5 space-y-4">
               {[
                 'Creators who want paid subscriber access in USDC.',

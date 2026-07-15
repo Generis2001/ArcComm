@@ -19,7 +19,7 @@ export default function StudioLayout({ children }: { children: React.ReactNode }
         <div className="relative z-10 space-y-2">
           <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Creator studio</p>
           <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Manage your profile, content, products, and communities.</h1>
-          <p className="text-sm text-white/[0.56]">Use the studio to publish, price access, and manage creator activity on ArcComm.</p>
+          <p className="text-sm text-white/[0.56]">Use the studio to publish, price access, and manage creator activity on Arcom.</p>
         </div>
       </section>
 

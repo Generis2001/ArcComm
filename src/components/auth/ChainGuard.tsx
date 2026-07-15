@@ -42,7 +42,7 @@ export function ChainGuard({ children }: ChainGuardProps) {
         <div className="space-y-2">
           <h2 className="text-xl font-semibold">Wrong network</h2>
           <p className="text-sm text-white/[0.58]">
-            ArcComm runs on Arc Testnet. Switch your wallet to continue.
+            Arcom runs on Arc Testnet. Switch your wallet to continue.
           </p>
         </div>
 

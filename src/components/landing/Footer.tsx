@@ -8,7 +8,7 @@ export function Footer() {
         <div className="space-y-3">
           <LogoWordmark size={30} />
           <p className="max-w-lg text-sm leading-6 text-white/[0.54]">
-            ArcComm is a creator platform for subscriptions, gated communities, premium content,
+            Arcom is a creator platform for subscriptions, gated communities, premium content,
             and digital products paid in USDC on Arc Testnet.
           </p>
         </div>

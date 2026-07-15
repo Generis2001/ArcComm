@@ -234,7 +234,7 @@ export default function NewContentPage() {
       {/* Static NSFW warning */}
       <div className="rounded-lg border border-destructive/[0.40] bg-destructive/[0.05] px-4 py-3 flex items-start gap-3">
         <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on ArcComm.</p>
+        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on Arcom.</p>
       </div>
 
       {/* Dynamic NSFW blocked banner */}
@@ -244,7 +244,7 @@ export default function NewContentPage() {
           <div className="space-y-1">
             <p className="text-sm font-semibold text-destructive">Content blocked by automatic moderation</p>
             <p className="text-sm text-destructive/[0.80]">
-              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates ArcComm community standards and is strictly prohibited.
+              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates Arcom community standards and is strictly prohibited.
             </p>
           </div>
         </div>
@@ -255,7 +255,7 @@ export default function NewContentPage() {
         <div className="rounded-lg border border-arc-600/30 bg-arc-600/5 px-4 py-3 space-y-3">
           <div className="flex items-start gap-3 text-sm text-muted-foreground">
             <Wallet className="h-4 w-4 mt-0.5 shrink-0 text-arc-400" />
-            <span>Publishing requires a one-time <strong className="text-foreground">2 USDC listing fee</strong> paid from your wallet.</span>
+            <span>Publishing requires a <strong className="text-foreground">2 USDC listing fee</strong> paid from your wallet.</span>
           </div>
           {feeError && (
             <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">

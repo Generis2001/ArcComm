@@ -1,6 +1,12 @@
-import { ethers } from 'hardhat';
+import hre from "hardhat";
+const { ethers } = hre;
+
 import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const DEPLOYMENTS_FILE = join(__dirname, '../deployments/arc-testnet.json');
 const PLATFORM_FEE_BPS = 500; // 5%

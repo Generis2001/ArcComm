@@ -123,7 +123,7 @@ export function AppSidebar() {
             isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none h-0 mt-0 p-0 border-0 overflow-hidden',
           )}
         >
-          <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.38]">ArcComm app</p>
+          <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.38]">Arcom app</p>
           <p className="mt-3 text-sm leading-6 text-white/[0.68]">
             Manage creator profiles, subscriptions, communities, and digital products on Arc Testnet.
           </p>

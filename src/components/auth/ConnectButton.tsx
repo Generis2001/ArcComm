@@ -29,7 +29,7 @@ export function ConnectButton() {
     return (
       <Button variant="arc" size="xl" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Opening ArcComm
+        Opening Arcom
       </Button>
     );
   }

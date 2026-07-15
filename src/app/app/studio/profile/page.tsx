@@ -310,7 +310,7 @@ export default function StudioProfilePage() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium">Delete ArcComm account</p>
+            <p className="text-sm font-medium">Delete Arcom account</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               Permanently deletes your profile, creator content, purchases, and account data.
             </p>
@@ -342,9 +342,9 @@ export default function StudioProfilePage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete your ArcComm account?</DialogTitle>
+            <DialogTitle>Delete your Arcom account?</DialogTitle>
             <DialogDescription>
-              This permanently removes your profile, creator content, purchases, and connected ArcComm account. This cannot be undone.
+              This permanently removes your profile, creator content, purchases, and connected Arcom account. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleDeleteAccount} className="space-y-4">

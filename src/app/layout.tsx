@@ -17,9 +17,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ArcComm — Creator revenue on Arc Testnet',
+  title: 'Arcom — Creator revenue on Arc Testnet',
   description:
-    'ArcComm is a wallet-native creator platform for subscriptions, gated communities, and digital products settled in USDC on Arc Testnet.',
+    'Arcom is a wallet-native creator platform for subscriptions, gated communities, and digital products settled in USDC on Arc Testnet.',
   icons: {
     icon: '/assets/logo.svg',
     shortcut: '/assets/logo.svg',

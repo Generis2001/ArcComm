@@ -115,7 +115,7 @@ export default async function ExplorePage() {
         <div className="relative z-10 space-y-2">
           <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Explore</p>
           <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Find creators, subscriptions, and paid content.</h1>
-          <p className="text-sm text-white/[0.56]">Browse ArcComm creator profiles and see what each creator offers.</p>
+          <p className="text-sm text-white/[0.56]">Browse Arcom creator profiles and see what each creator offers.</p>
         </div>
       </section>
 

@@ -124,7 +124,7 @@ export default function StudioContentPage() {
                   <div className="mx-4 mb-1 rounded-md border border-destructive/[0.40] bg-destructive/[0.05] px-3 py-2 flex items-start gap-2">
                     <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                     <p className="text-xs text-destructive">
-                      This content has been flagged as potentially violating ArcComm community standards and cannot be published until reviewed.
+                      This content has been flagged as potentially violating Arcom community standards and cannot be published until reviewed.
                     </p>
                   </div>
                 )}

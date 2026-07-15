@@ -32,7 +32,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-black/[0.72] backdrop-blur-xl">
                   <div className="flex items-center justify-between gap-4 px-4 py-4 md:px-8">
                     <div>
-                      <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/[0.36]">ArcComm</p>
+                      <p className="text-[0.65rem] uppercase tracking-[0.22em] text-white/[0.36]">Arcom</p>
                       <p className="mt-1 text-sm text-white/[0.62]">Subscriptions, access, and creator management on Arc Testnet.</p>
                     </div>
                     <ArcSymbolBadge />
