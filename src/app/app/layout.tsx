@@ -1,11 +1,11 @@
-import Link from 'next/link';
-import { BookMarked, Clapperboard, Compass, LayoutDashboard, Store, Users2 } from 'lucide-react';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 import { ChainGuard } from '@/components/auth/ChainGuard';
 import { CreatorGuard } from '@/components/app/CreatorGuard';
+import { AppSidebar } from '@/components/app/AppSidebar';
 import { SidebarFooter } from '@/components/app/SidebarFooter';
-import { ArcSymbolBadge, ArcWordmark } from '@/components/ui/ArcBadge';
-import { LogoWordmark } from '@/components/ui/Logo';
+import { ArcSymbolBadge } from '@/components/ui/ArcBadge';
+import { BookMarked, Clapperboard, Compass, LayoutDashboard, Store, Users2 } from 'lucide-react';
+import Link from 'next/link';
 
 const navItems = [
   { href: '/app', icon: LayoutDashboard, label: 'Home' },
@@ -23,36 +23,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <CreatorGuard>
           <div className="arc-shell min-h-screen">
             <div className="mx-auto flex min-h-screen max-w-[1500px]">
-              <aside className="sticky top-0 hidden h-screen w-[296px] shrink-0 border-r border-white/[0.08] bg-black/[0.45] px-5 py-6 md:flex md:flex-col">
-                <Link href="/app" className="block px-1">
-                  <LogoWordmark size={28} />
-                </Link>
 
-                <div className="mt-8 rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] p-4">
-                  <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.38]">ArcComm app</p>
-                  <p className="mt-3 text-sm leading-6 text-white/[0.68]">
-                    Manage creator profiles, subscriptions, communities, and digital products on Arc Testnet.
-                  </p>
-                </div>
+              {/* Collapsible hover sidebar — handles its own spacer */}
+              <AppSidebar />
 
-                <nav className="mt-6 flex-1 space-y-1.5">
-                  {navItems.map((item) => (
-                    <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} />
-                  ))}
-                </nav>
-
-                <div className="space-y-4">
-                  <div className="rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] px-4 py-3">
-                    <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/[0.38]">Built on</p>
-                    <div className="mt-2 flex items-center justify-between gap-3">
-                      <ArcWordmark className="h-4" />
-                      <ArcSymbolBadge className="h-8 w-8" />
-                    </div>
-                  </div>
-                  <SidebarFooter />
-                </div>
-              </aside>
-
+              {/* Main content column */}
               <div className="flex min-h-screen flex-1 flex-col">
                 <header className="sticky top-0 z-30 border-b border-white/[0.08] bg-black/[0.72] backdrop-blur-xl">
                   <div className="flex items-center justify-between gap-4 px-4 py-4 md:px-8">
@@ -62,9 +37,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     </div>
                     <ArcSymbolBadge />
                   </div>
+                  {/* Mobile nav pills */}
                   <div className="flex gap-2 overflow-x-auto px-4 pb-4 md:hidden">
                     {navItems.map((item) => (
-                      <NavItem key={item.href} href={item.href} icon={item.icon} label={item.label} mobile />
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.04] px-4 py-2 text-xs text-white/[0.64] transition-colors hover:bg-white/[0.08] hover:text-white"
+                      >
+                        <item.icon className="h-3.5 w-3.5" />
+                        {item.label}
+                      </Link>
                     ))}
                   </div>
                 </header>
@@ -78,34 +61,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   </div>
                 </main>
               </div>
+
             </div>
           </div>
         </CreatorGuard>
       </ChainGuard>
     </AuthGuard>
-  );
-}
-
-function NavItem({
-  href,
-  icon: Icon,
-  label,
-  mobile = false,
-}: {
-  href: string;
-  icon: React.ElementType;
-  label: string;
-  mobile?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={mobile
-        ? 'inline-flex items-center gap-2 rounded-full border border-white/[0.10] bg-white/[0.04] px-4 py-2 text-xs text-white/[0.64] transition-colors hover:bg-white/[0.08] hover:text-white'
-        : 'flex items-center gap-3 rounded-[1rem] border border-transparent px-3 py-3 text-sm text-white/[0.56] transition-colors hover:border-white/[0.10] hover:bg-white/[0.05] hover:text-white'}
-    >
-      <Icon className={mobile ? 'h-3.5 w-3.5' : 'h-4 w-4'} />
-      {label}
-    </Link>
   );
 }
