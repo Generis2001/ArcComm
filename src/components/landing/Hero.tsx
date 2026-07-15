@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowUpRight, Droplets } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { ConnectButton } from '@/components/auth/ConnectButton';
 import { OrbitGraphic } from '@/components/ui/OrbitGraphic';
 import type { LandingStats } from '@/lib/landing/stats';
@@ -26,15 +26,6 @@ export function Hero({ stats }: { stats: LandingStats }) {
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <ConnectButton />
-            <a
-              href="https://faucet.circle.com"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-3 text-sm text-white/[0.72] transition-colors hover:bg-white/[0.07] hover:text-white"
-            >
-              <Droplets className="h-4 w-4" />
-              Get Faucet
-            </a>
             <Link
               href="#product"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-3 text-sm text-white/[0.72] transition-colors hover:bg-white/[0.07] hover:text-white"

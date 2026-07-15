@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Droplets } from 'lucide-react';
 import { FeatureGrid } from '@/components/landing/FeatureGrid';
 import { Footer } from '@/components/landing/Footer';
 import { Hero } from '@/components/landing/Hero';
@@ -31,7 +32,18 @@ export default async function LandingPage() {
             </Link>
           </div>
 
-          <ArcSymbolBadge className="h-9 w-9" />
+          <div className="flex items-center gap-3">
+            <a
+              href="https://faucet.circle.com"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] px-4 py-2 text-xs font-medium text-white/[0.72] transition-colors hover:bg-white/[0.08] hover:text-white"
+            >
+              <Droplets className="h-3.5 w-3.5" />
+              Get Faucet
+            </a>
+            <ArcSymbolBadge className="h-9 w-9" />
+          </div>
         </div>
       </nav>
 
