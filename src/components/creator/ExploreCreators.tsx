@@ -6,19 +6,10 @@ import { Search, X } from 'lucide-react';
 import { CreatorCard } from '@/components/creator/CreatorCard';
 import type { CreatorProfile } from '@/types/creator';
 
-const CONTENT_CATEGORIES = [
-  { value: 'ALL', label: 'All categories' },
-  { value: 'VIDEO', label: 'Video' },
-  { value: 'ARTICLE', label: 'Article' },
-  { value: 'IMAGE_GALLERY', label: 'Image gallery' },
-  { value: 'AUDIO', label: 'Audio' },
-  { value: 'FILE', label: 'File' },
-];
 
-function updateSearchParams(search: string, category: string) {
+function updateSearchParams(search: string) {
   const params = new URLSearchParams();
   if (search.trim()) params.set('q', search.trim());
-  if (category !== 'ALL') params.set('category', category);
   const query = params.toString();
   return query ? `?${query}` : '';
 }
@@ -29,15 +20,14 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
   const searchParams = useSearchParams();
 
   const [search, setSearch] = useState(() => searchParams.get('q') ?? '');
-  const [category, setCategory] = useState(() => searchParams.get('category') ?? 'ALL');
 
   // Controls the expanded / collapsed state of the search bar
   const [expanded, setExpanded] = useState(() => !!(searchParams.get('q')));
   const inputRef = useRef<HTMLInputElement>(null);
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const persistFilters = (nextSearch: string, nextCategory: string) => {
-    router.replace(`${pathname}${updateSearchParams(nextSearch, nextCategory)}`, {
+  const persistFilters = (nextSearch: string) => {
+    router.replace(`${pathname}${updateSearchParams(nextSearch)}`, {
       scroll: false,
     });
   };
@@ -51,9 +41,7 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
   // Close on leave only when there's no active search text and input isn't focused
   const handleMouseLeave = useCallback(() => {
     leaveTimer.current = setTimeout(() => {
-      if (!search && document.activeElement !== inputRef.current) {
-        setExpanded(false);
-      }
+      if (!search && document.activeElement !== inputRef.current) setExpanded(false);
     }, 150);
   }, [search]);
 
@@ -71,21 +59,17 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
 
   const clearSearch = () => {
     setSearch('');
-    persistFilters('', category);
+    persistFilters('');
     setExpanded(false);
     inputRef.current?.blur();
   };
 
   const filteredCreators = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
+    if (!query) return creators;
 
     return creators.filter((creator) => {
       const content = creator.content ?? [];
-      const matchesCategory =
-        category === 'ALL' || content.some((item) => item.type === category);
-      if (!matchesCategory) return false;
-      if (!query) return true;
-
       const searchableText = [
         creator.displayName,
         creator.handle,
@@ -101,7 +85,7 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
 
       return searchableText.includes(query);
     });
-  }, [category, creators, search]);
+  }, [creators, search]);
 
   return (
     <div className="space-y-5">
@@ -141,7 +125,7 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
                 onChange={(e) => {
                   const v = e.target.value;
                   setSearch(v);
-                  persistFilters(v, category);
+                  persistFilters(v);
                 }}
                 onFocus={() => {
                   if (leaveTimer.current) clearTimeout(leaveTimer.current);
@@ -165,24 +149,6 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
             </div>
           </div>
         </div>
-
-        {/* Category filter */}
-        <select
-          value={category}
-          onChange={(e) => {
-            const v = e.target.value;
-            setCategory(v);
-            persistFilters(search, v);
-          }}
-          aria-label="Filter by content category"
-          className="h-10 rounded-full border border-white/[0.10] bg-black/[0.30] px-4 text-sm text-white/[0.70] outline-none transition-colors focus:border-white/[0.26] sm:w-44"
-        >
-          {CONTENT_CATEGORIES.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-zinc-950">
-              {opt.label}
-            </option>
-          ))}
-        </select>
 
         {/* Result count */}
         <p className="ml-auto text-sm text-white/[0.40]" aria-live="polite">
