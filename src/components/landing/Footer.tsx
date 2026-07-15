@@ -13,9 +13,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="inline-flex items-center rounded-full border border-white/[0.10] bg-white/[0.04] px-4 py-2">
-          <ArcWordmark />
-        </div>
+        <ArcWordmark />
       </div>
     </footer>
   );

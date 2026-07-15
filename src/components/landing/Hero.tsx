@@ -34,25 +34,25 @@ export function Hero({ stats }: { stats: LandingStats }) {
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
-
         </div>
 
         <div className="relative z-10 w-full max-w-[460px] self-start justify-self-center lg:justify-self-end">
           <OrbitGraphic />
         </div>
 
-        <div className="relative z-10 grid gap-4 sm:grid-cols-3 lg:col-span-2">
-          <div className="arc-panel p-4">
+        {/* Stats — bare text, no card boxes */}
+        <div className="relative z-10 grid gap-8 sm:grid-cols-3 lg:col-span-2 border-t border-white/[0.07] pt-8">
+          <div>
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Creator heartbeat</p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorHeartbeat}</p>
             <p className="mt-2 text-sm leading-6 text-white/[0.54]">Confirmed creator earnings recorded by Arcom settlements.</p>
           </div>
-          <div className="arc-panel p-4">
+          <div>
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Active creators</p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorCount ?? 'Unavailable'}</p>
             <p className="mt-2 text-sm leading-6 text-white/[0.54]">Creator profiles currently live on the platform.</p>
           </div>
-          <div className="arc-panel p-4">
+          <div>
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Router fee</p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.routerFeeLabel}</p>
             <p className="mt-2 text-sm leading-6 text-white/[0.54]">Read directly from the deployed payment router contract.</p>
