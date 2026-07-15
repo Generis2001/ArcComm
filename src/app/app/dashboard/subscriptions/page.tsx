@@ -40,12 +40,8 @@ export default function SubscriptionsPage() {
 
   return (
     <div className="space-y-6">
-      {/* ── Header watermark panel ── */}
-      <section
-        className="arc-panel arc-watermark p-6 md:p-8"
-        data-watermark="SUBS"
-      >
-        <div className="relative z-10 space-y-2">
+      <div className="py-2">
+        <div className="space-y-2">
           <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Subscriptions</p>
           <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">
             Your creator access periods.
@@ -63,7 +59,7 @@ export default function SubscriptionsPage() {
             </p>
           )}
         </div>
-      </section>
+      </div>
 
       {/* ── Expired notice banner ── */}
       {expired.length > 0 && (

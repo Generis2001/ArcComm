@@ -146,23 +146,14 @@ export function AppSidebar() {
         {/* ── Footer: Built on + balance/wallet ── */}
         <div className="space-y-4">
           {/* Built on Arc */}
-          <div
-            className={cn(
-              'rounded-[1.35rem] border border-white/[0.10] bg-white/[0.03] px-4 py-3',
-              'transition-all duration-200',
-              !isOpen && 'flex justify-center px-2',
-            )}
-          >
+          <div className={cn('flex items-center gap-2 px-1 py-2', !isOpen && 'justify-center')}>
             {isOpen ? (
               <>
-                <p className="text-[0.65rem] uppercase tracking-[0.18em] text-white/[0.38]">Built on</p>
-                <div className="mt-2 flex items-center justify-between gap-3">
-                  <ArcWordmark className="h-4" />
-                  <ArcSymbolBadge className="h-8 w-8" />
-                </div>
+                <ArcWordmark className="h-4" />
+                <ArcSymbolBadge className="h-7 w-7 ml-auto" />
               </>
             ) : (
-              <ArcSymbolBadge className="h-8 w-8" />
+              <ArcSymbolBadge className="h-7 w-7" />
             )}
           </div>
 

@@ -111,16 +111,16 @@ export default async function ExplorePage() {
 
   return (
     <div className="space-y-6">
-      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="EXPLORE">
+      <div className="py-2">
         <div className="relative z-10 space-y-2">
           <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Explore</p>
           <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Find creators, subscriptions, and paid content.</h1>
           <p className="text-sm text-white/[0.56]">Browse Arcom creator profiles and see what each creator offers.</p>
         </div>
-      </section>
+      </div>
 
       {creators.length === 0 ? (
-        <div className="arc-panel py-16 text-center text-white/[0.54]">
+        <div className="py-16 text-center text-white/[0.54]">
           No creators yet. Be the first to publish content.
         </div>
       ) : (

@@ -126,7 +126,7 @@ export default function PurchasesPage() {
 
   return (
     <div className="space-y-6">
-      <section className="arc-panel arc-watermark p-6 md:p-8" data-watermark="PURCHASES">
+      <div className="py-2">
         <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Purchases</p>
@@ -140,7 +140,7 @@ export default function PurchasesPage() {
             </Link>
           </Button>
         </div>
-      </section>
+      </div>
 
       {isLoading ? (
         <div className="flex justify-center py-16">

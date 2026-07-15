@@ -27,7 +27,7 @@ const quickActions = [
 export default function AppHomePage() {
   return (
     <div className="space-y-6">
-      <section className="arc-panel arc-watermark overflow-hidden p-6 md:p-8" data-watermark="HOME">
+      <div className="py-2">
         <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-4">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Arcom home</p>
@@ -49,7 +49,7 @@ export default function AppHomePage() {
             </Button>
           </div>
         </div>
-      </section>
+      </div>
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="grid gap-4 sm:grid-cols-3">
@@ -57,9 +57,7 @@ export default function AppHomePage() {
             <Link key={action.href} href={action.href}>
               <Card className="h-full border-white/[0.10] bg-white/[0.03] transition-transform duration-200 hover:-translate-y-1">
                 <CardHeader>
-                  <div className="mb-2 inline-flex w-fit rounded-full border border-white/[0.10] bg-white/[0.05] p-3">
-                    <action.icon className="h-5 w-5 text-white" />
-                  </div>
+                  <action.icon className="mb-2 h-5 w-5 text-white/[0.70]" />
                   <CardTitle className="text-lg">{action.title}</CardTitle>
                 </CardHeader>
                 <CardContent>

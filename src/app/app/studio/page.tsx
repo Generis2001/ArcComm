@@ -32,7 +32,7 @@ export default function StudioHomePage() {
 
   return (
     <div className="space-y-6">
-      <div className="arc-panel flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-2">
         <div>
           <p className="text-sm text-white/[0.52]">Welcome back</p>
           <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-white">@{me.creator.handle}</p>
