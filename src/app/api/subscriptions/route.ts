@@ -3,6 +3,8 @@ import { requireAuth } from '@/lib/privy/server';
 import { prisma } from '@/lib/db/client';
 import { toApiError, NotFoundError } from '@/lib/utils/errors';
 
+const GRACE_PERIOD_HOURS = 48;
+
 export async function GET(req: NextRequest) {
   try {
     const claims = await requireAuth(req);
@@ -12,11 +14,38 @@ export async function GET(req: NextRequest) {
     const user = await prisma.user.findUnique({ where: { privyId: claims.userId } });
     if (!user) throw new NotFoundError('User');
 
+    const now = new Date();
+    const graceDeadline = new Date(now.getTime() - GRACE_PERIOD_HOURS * 60 * 60 * 1000);
+
+    // Eagerly expire subs that the nightly cron may not have reached yet.
+    // This guarantees status is accurate on every page load regardless of cron timing.
+    await prisma.$transaction([
+      // ACTIVE/PAST_DUE past grace period → EXPIRED
+      prisma.subscription.updateMany({
+        where: {
+          userId: user.id,
+          status: { in: ['ACTIVE', 'PAST_DUE'] },
+          currentPeriodEnd: { lt: graceDeadline },
+        },
+        data: { status: 'EXPIRED' },
+      }),
+      // ACTIVE past period end but within grace → PAST_DUE
+      prisma.subscription.updateMany({
+        where: {
+          userId: user.id,
+          status: 'ACTIVE',
+          currentPeriodEnd: { lt: now, gte: graceDeadline },
+        },
+        data: { status: 'PAST_DUE' },
+      }),
+    ]);
+
+    // Return all statuses (including EXPIRED) so the dashboard can show them
     const subscriptions = await prisma.subscription.findMany({
       where: {
         userId: user.id,
         ...(creatorId ? { creatorId } : {}),
-        status: { in: ['ACTIVE', 'PAST_DUE'] },
+        status: { in: ['ACTIVE', 'PAST_DUE', 'EXPIRED'] },
       },
       include: {
         tier: { select: { id: true, name: true, priceUsdc: true, intervalDays: true, perks: true } },

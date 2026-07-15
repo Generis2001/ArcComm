@@ -99,9 +99,9 @@
     position: absolute;
     inset: auto auto 50% 50%;
     transform: translate(-50%, 50%);
-    font-size: clamp(5rem, 18vw, 16rem);
+    font-size: clamp(3rem, 8vw, 7rem);
     line-height: 0.85;
-    letter-spacing: -0.08em;
+    letter-spacing: -0.06em;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.04);
     white-space: nowrap;
