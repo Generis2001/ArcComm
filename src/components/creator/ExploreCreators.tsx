@@ -1,11 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { CreatorCard } from '@/components/creator/CreatorCard';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import type { CreatorProfile } from '@/types/creator';
 
 const CONTENT_CATEGORIES = [
@@ -19,10 +17,8 @@ const CONTENT_CATEGORIES = [
 
 function updateSearchParams(search: string, category: string) {
   const params = new URLSearchParams();
-
   if (search.trim()) params.set('q', search.trim());
   if (category !== 'ALL') params.set('category', category);
-
   const query = params.toString();
   return query ? `?${query}` : '';
 }
@@ -31,11 +27,53 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const [search, setSearch] = useState(() => searchParams.get('q') ?? '');
   const [category, setCategory] = useState(() => searchParams.get('category') ?? 'ALL');
 
+  // Controls the expanded / collapsed state of the search bar
+  const [expanded, setExpanded] = useState(() => !!(searchParams.get('q')));
+  const inputRef = useRef<HTMLInputElement>(null);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const persistFilters = (nextSearch: string, nextCategory: string) => {
-    router.replace(`${pathname}${updateSearchParams(nextSearch, nextCategory)}`, { scroll: false });
+    router.replace(`${pathname}${updateSearchParams(nextSearch, nextCategory)}`, {
+      scroll: false,
+    });
+  };
+
+  // Open on hover (with a tiny debounce so it doesn't flicker)
+  const handleMouseEnter = useCallback(() => {
+    if (leaveTimer.current) clearTimeout(leaveTimer.current);
+    setExpanded(true);
+  }, []);
+
+  // Close on leave only when there's no active search text and input isn't focused
+  const handleMouseLeave = useCallback(() => {
+    leaveTimer.current = setTimeout(() => {
+      if (!search && document.activeElement !== inputRef.current) {
+        setExpanded(false);
+      }
+    }, 150);
+  }, [search]);
+
+  const handleIconClick = () => {
+    setExpanded(true);
+    // slight delay lets the width transition start before focus triggers scroll
+    setTimeout(() => inputRef.current?.focus(), 50);
+  };
+
+  const handleInputBlur = () => {
+    if (!search) {
+      leaveTimer.current = setTimeout(() => setExpanded(false), 200);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearch('');
+    persistFilters('', category);
+    setExpanded(false);
+    inputRef.current?.blur();
   };
 
   const filteredCreators = useMemo(() => {
@@ -43,16 +81,20 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
 
     return creators.filter((creator) => {
       const content = creator.content ?? [];
-      const matchesCategory = category === 'ALL' || content.some((item) => item.type === category);
+      const matchesCategory =
+        category === 'ALL' || content.some((item) => item.type === category);
       if (!matchesCategory) return false;
-
       if (!query) return true;
 
       const searchableText = [
         creator.displayName,
         creator.handle,
         creator.bio ?? '',
-        ...content.flatMap((item) => [item.title, item.description ?? '', item.type.replaceAll('_', ' ')]),
+        ...content.flatMap((item) => [
+          item.title,
+          item.description ?? '',
+          item.type.replaceAll('_', ' '),
+        ]),
       ]
         .join(' ')
         .toLocaleLowerCase();
@@ -61,65 +103,97 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
     });
   }, [category, creators, search]);
 
-  const clearSearch = () => {
-    setSearch('');
-    persistFilters('', category);
-  };
-
   return (
     <div className="space-y-5">
-      <div className="arc-panel flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/[0.38]" />
-          <Input
-            value={search}
-            onChange={(event) => {
-              const nextSearch = event.target.value;
-              setSearch(nextSearch);
-              persistFilters(nextSearch, category);
-            }}
-            placeholder="Search creators or content"
+      {/* ── Filter bar ── */}
+      <div className="flex items-center gap-3">
+
+        {/* Expanding search — icon on left, bar grows right on hover */}
+        <div
+          className="relative flex items-center"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Search icon button — always visible */}
+          <button
+            type="button"
+            onClick={handleIconClick}
             aria-label="Search creators or content"
-            className="h-11 border-white/[0.10] bg-black/[0.24] pl-10 pr-10 text-white placeholder:text-white/[0.36]"
-          />
-          {search && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={clearSearch}
-              className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2 text-white/[0.48] hover:bg-white/[0.08] hover:text-white"
-              aria-label="Clear search"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
+            className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.10] bg-black/[0.30] text-white/[0.50] transition-all duration-200 hover:border-white/[0.22] hover:bg-white/[0.06] hover:text-white"
+          >
+            <Search className="h-[15px] w-[15px]" />
+          </button>
+
+          {/* Expanding input — slides out to the right */}
+          <div
+            style={{
+              width: expanded ? '260px' : '0px',
+              opacity: expanded ? 1 : 0,
+              transition: 'width 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 180ms ease',
+              overflow: 'hidden',
+            }}
+          >
+            <div className="relative ml-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setSearch(v);
+                  persistFilters(v, category);
+                }}
+                onFocus={() => {
+                  if (leaveTimer.current) clearTimeout(leaveTimer.current);
+                  setExpanded(true);
+                }}
+                onBlur={handleInputBlur}
+                placeholder="Search creators or content…"
+                aria-label="Search creators or content"
+                className="h-10 w-full rounded-full border border-white/[0.10] bg-black/[0.30] pl-4 pr-9 text-sm text-white placeholder:text-white/[0.34] outline-none transition-colors focus:border-white/[0.26] focus:bg-white/[0.04]"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/[0.40] transition-colors hover:text-white"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
+        {/* Category filter */}
         <select
           value={category}
-          onChange={(event) => {
-            const nextCategory = event.target.value;
-            setCategory(nextCategory);
-            persistFilters(search, nextCategory);
+          onChange={(e) => {
+            const v = e.target.value;
+            setCategory(v);
+            persistFilters(search, v);
           }}
           aria-label="Filter by content category"
-          className="h-11 rounded-full border border-white/[0.10] bg-black/[0.24] px-4 text-sm text-white/[0.74] outline-none transition-colors focus:border-white/[0.28] sm:w-48"
+          className="h-10 rounded-full border border-white/[0.10] bg-black/[0.30] px-4 text-sm text-white/[0.70] outline-none transition-colors focus:border-white/[0.26] sm:w-44"
         >
-          {CONTENT_CATEGORIES.map((option) => (
-            <option key={option.value} value={option.value} className="bg-zinc-950">
-              {option.label}
+          {CONTENT_CATEGORIES.map((opt) => (
+            <option key={opt.value} value={opt.value} className="bg-zinc-950">
+              {opt.label}
             </option>
           ))}
         </select>
+
+        {/* Result count */}
+        <p className="ml-auto text-sm text-white/[0.40]" aria-live="polite">
+          {filteredCreators.length}{' '}
+          {filteredCreators.length === 1 ? 'creator' : 'creators'}
+        </p>
       </div>
 
-      <p className="text-sm text-white/[0.48]" aria-live="polite">
-        {filteredCreators.length} {filteredCreators.length === 1 ? 'creator' : 'creators'} found
-      </p>
-
+      {/* ── Creator grid ── */}
       {filteredCreators.length === 0 ? (
-        <div className="arc-panel py-16 text-center text-white/[0.54]">
+        <div className="py-16 text-center text-white/[0.54]">
           No creators match your search or category filter.
         </div>
       ) : (
