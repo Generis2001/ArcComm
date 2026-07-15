@@ -103,7 +103,7 @@ export function ExploreCreators({ creators }: { creators: CreatorProfile[] }) {
             type="button"
             onClick={handleIconClick}
             aria-label="Search creators or content"
-            className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.10] bg-black/[0.30] text-white/[0.50] transition-all duration-200 hover:border-white/[0.22] hover:bg-white/[0.06] hover:text-white"
+            className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center text-white/[0.50] transition-colors duration-200 hover:text-white"
           >
             <Search className="h-[15px] w-[15px]" />
           </button>
