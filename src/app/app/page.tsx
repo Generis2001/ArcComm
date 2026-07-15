@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookMarked, Clapperboard, Compass, TrendingUp } from 'lucide-react';
+import { BookMarked, Clapperboard, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -69,19 +69,6 @@ export default function AppHomePage() {
             </Link>
           ))}
         </div>
-
-        <Card className="border-white/[0.10] bg-black/[0.55]">
-          <CardHeader>
-            <div className="mb-3 inline-flex w-fit rounded-full border border-white/[0.10] bg-white/[0.05] p-3">
-              <TrendingUp className="h-5 w-5 text-white" />
-            </div>
-            <CardTitle className="text-lg">Your ArcComm account</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm leading-6 text-white/[0.58]">
-            <p>Use your wallet to subscribe, purchase access, and join creator communities.</p>
-            <p>Use the creator studio to publish content, set up products, and manage your profile.</p>
-          </CardContent>
-        </Card>
       </section>
     </div>
   );
