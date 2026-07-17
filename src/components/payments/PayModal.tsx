@@ -120,7 +120,7 @@ export function PayModal({
               <Button variant="outline" onClick={() => handleClose(false)} disabled={isLoading}>
                 Cancel
               </Button>
-              <Button variant="arc" onClick={handleConfirm} disabled={isLoading}>
+              <Button variant="cohora" onClick={handleConfirm} disabled={isLoading}>
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

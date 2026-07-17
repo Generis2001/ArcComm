@@ -72,7 +72,7 @@ export default function StudioContentPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Content</h2>
-        <Button variant="arc" size="sm" asChild>
+        <Button variant="cohora" size="sm" asChild>
           <Link href="/app/studio/content/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             New Content
@@ -92,7 +92,7 @@ export default function StudioContentPage() {
         <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
           <FileText className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">No content yet.</p>
-          <Button variant="arc" size="sm" asChild>
+          <Button variant="cohora" size="sm" asChild>
             <Link href="/app/studio/content/new">Create your first piece</Link>
           </Button>
         </div>
@@ -124,7 +124,7 @@ export default function StudioContentPage() {
                   <div className="mx-4 mb-1 rounded-md border border-destructive/[0.40] bg-destructive/[0.05] px-3 py-2 flex items-start gap-2">
                     <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                     <p className="text-xs text-destructive">
-                      This content has been flagged as potentially violating Arcom community standards and cannot be published until reviewed.
+                      This content has been flagged as potentially violating Cohora community standards and cannot be published until reviewed.
                     </p>
                   </div>
                 )}

@@ -67,12 +67,12 @@
 }
 
 @layer utilities {
-  .arc-shell {
+  .cohora-shell {
     position: relative;
     isolation: isolate;
   }
 
-  .arc-shell::before {
+  .cohora-shell::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -84,17 +84,17 @@
     z-index: -1;
   }
 
-  .arc-panel {
+  .cohora-panel {
     @apply rounded-[1.5rem] border border-white/[0.10] bg-white/[0.03] shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_24px_80px_rgba(0,0,0,0.35)];
     backdrop-filter: blur(22px);
   }
 
-  .arc-watermark {
+  .cohora-watermark {
     position: relative;
     overflow: hidden;
   }
 
-  .arc-watermark::before {
+  .cohora-watermark::before {
     content: attr(data-watermark);
     position: absolute;
     inset: auto auto 50% 50%;
@@ -109,7 +109,7 @@
     z-index: 0;
   }
 
-  .arc-copy {
+  .cohora-copy {
     @apply text-sm leading-7 text-white/[0.64] md:text-base;
   }
 

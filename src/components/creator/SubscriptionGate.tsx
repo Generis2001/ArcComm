@@ -31,10 +31,10 @@ export function SubscriptionGate({ creatorId, tiers, children }: Props) {
   const cheapest = tiers[0];
 
   return (
-    <Card className="border-arc-600/30 bg-arc-600/5">
+    <Card className="border-cohora-600/30 bg-cohora-600/5">
       <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
-        <div className="rounded-full bg-arc-600/10 p-4">
-          <Lock className="h-6 w-6 text-arc-400" />
+        <div className="rounded-full bg-cohora-600/10 p-4">
+          <Lock className="h-6 w-6 text-cohora-400" />
         </div>
         <div className="space-y-1">
           <p className="font-semibold text-foreground">Subscribe to access this creator&apos;s content</p>

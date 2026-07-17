@@ -32,7 +32,7 @@ export function ChainGuard({ children }: ChainGuardProps) {
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-6">
-      <div className="arc-panel max-w-sm space-y-5 p-8 text-center">
+      <div className="cohora-panel max-w-sm space-y-5 p-8 text-center">
         <div className="flex justify-center">
           <div className="rounded-full border border-amber-300/[0.15] bg-amber-400/[0.10] p-4">
             <AlertTriangle className="h-8 w-8 text-amber-300" />
@@ -42,7 +42,7 @@ export function ChainGuard({ children }: ChainGuardProps) {
         <div className="space-y-2">
           <h2 className="text-xl font-semibold">Wrong network</h2>
           <p className="text-sm text-white/[0.58]">
-            Arcom runs on Arc Testnet. Switch your wallet to continue.
+            Cohora runs on Arc Testnet. Switch your wallet to continue.
           </p>
         </div>
 
@@ -52,7 +52,7 @@ export function ChainGuard({ children }: ChainGuardProps) {
           </p>
         )}
 
-        <Button variant="arc" size="lg" className="w-full" onClick={switchToArc} disabled={state === 'switching'}>
+        <Button variant="cohora" size="lg" className="w-full" onClick={switchToArc} disabled={state === 'switching'}>
           {state === 'switching' ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -21,7 +21,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="flex min-h-screen items-center justify-center gap-3">
       <Loader2 className="h-6 w-6 animate-spin text-white/[0.70]" />
-      <p className="text-white/[0.58]">Signing you into Arcom...</p>
+      <p className="text-white/[0.58]">Signing you into Cohora...</p>
     </div>
   );
 }

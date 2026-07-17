@@ -31,7 +31,7 @@ export function JoinButton({ communityId, creatorId, entryFeeUsdc, entryFeeForma
 
   return (
     <>
-      <Button variant="arc" size="sm" onClick={() => setOpen(true)} className="gap-1.5">
+      <Button variant="cohora" size="sm" onClick={() => setOpen(true)} className="gap-1.5">
         <Users2 className="h-4 w-4" />
         Join · {entryFeeFormatted}
       </Button>

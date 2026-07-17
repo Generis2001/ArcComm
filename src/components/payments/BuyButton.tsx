@@ -69,7 +69,7 @@ export function BuyButton({ creatorId, contentId, productId, priceUsdc, label, t
 
   return (
     <>
-      <Button variant="arc" size="sm" onClick={() => setOpen(true)} className={className}>
+      <Button variant="cohora" size="sm" onClick={() => setOpen(true)} className={className}>
         <ShoppingCart className="mr-1.5 h-3.5 w-3.5" />
         {label} — {formatUsdc(priceUsdc)}
       </Button>

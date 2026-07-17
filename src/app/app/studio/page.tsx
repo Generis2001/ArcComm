@@ -37,7 +37,7 @@ export default function StudioHomePage() {
           <p className="text-sm text-white/[0.52]">Welcome back</p>
           <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-white">@{me.creator.handle}</p>
         </div>
-        <Button variant="arc" size="sm" asChild>
+        <Button variant="cohora" size="sm" asChild>
           <Link href="/app/studio/content/new">
             <PlusCircle className="mr-2 h-4 w-4" />
             New content

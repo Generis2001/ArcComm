@@ -97,7 +97,7 @@ export function CreatePostForm({ communityId }: CreatePostFormProps) {
         <button
           type="button"
           onClick={() => fileRef.current?.click()}
-          className="text-sm text-muted-foreground hover:text-arc-400 flex items-center gap-1.5 transition-colors"
+          className="text-sm text-muted-foreground hover:text-cohora-400 flex items-center gap-1.5 transition-colors"
         >
           <Paperclip className="h-4 w-4" />
           Attach
@@ -109,7 +109,7 @@ export function CreatePostForm({ communityId }: CreatePostFormProps) {
           className="hidden"
           onChange={(e) => setMediaFile(e.target.files?.[0] ?? null)}
         />
-        <Button type="submit" variant="arc" size="sm" disabled={submitting || uploading || !body.trim()}>
+        <Button type="submit" variant="cohora" size="sm" disabled={submitting || uploading || !body.trim()}>
           {(submitting || uploading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {uploading ? 'Uploading...' : submitting ? 'Posting...' : 'Post'}
         </Button>

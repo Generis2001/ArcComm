@@ -54,7 +54,7 @@ export default function CommunityPage({ params }: { params: Promise<{ id: string
             {community.creator.user.avatarUrl ? (
               <Image src={community.creator.user.avatarUrl} alt="" width={20} height={20} className="rounded-full object-cover" />
             ) : (
-              <div className="h-5 w-5 rounded-full bg-arc-500/20 flex items-center justify-center text-xs font-bold text-arc-400">
+              <div className="h-5 w-5 rounded-full bg-cohora-500/20 flex items-center justify-center text-xs font-bold text-cohora-400">
                 {community.creator.displayName[0]}
               </div>
             )}

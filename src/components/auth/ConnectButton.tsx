@@ -18,7 +18,7 @@ export function ConnectButton() {
 
   if (!ready) {
     return (
-      <Button variant="arc" size="xl" disabled>
+      <Button variant="cohora" size="xl" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         Loading wallet access
       </Button>
@@ -27,15 +27,15 @@ export function ConnectButton() {
 
   if (authenticated) {
     return (
-      <Button variant="arc" size="xl" disabled>
+      <Button variant="cohora" size="xl" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Opening Arcom
+        Opening Cohora
       </Button>
     );
   }
 
   return (
-    <Button variant="arc" size="xl" onClick={login} className="gap-2 px-7">
+    <Button variant="cohora" size="xl" onClick={login} className="gap-2 px-7">
       <Wallet className="h-4 w-4" />
       Connect wallet
       <ArrowUpRight className="h-4 w-4" />

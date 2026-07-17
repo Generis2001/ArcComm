@@ -115,7 +115,7 @@ export default async function CreatorProfilePage({ params }: PageProps) {
           style={{ backgroundImage: `url(${creator.bannerUrl})` }}
         />
       ) : (
-        <div className="h-48 w-full rounded-xl bg-gradient-to-br from-arc-800 to-arc-950" />
+        <div className="h-48 w-full rounded-xl bg-gradient-to-br from-cohora-800 to-cohora-950" />
       )}
 
       {/* Profile header */}
@@ -123,14 +123,14 @@ export default async function CreatorProfilePage({ params }: PageProps) {
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold">{creator.displayName}</h1>
-            {creator.isVerified && <BadgeCheck className="h-5 w-5 text-arc-400" />}
+            {creator.isVerified && <BadgeCheck className="h-5 w-5 text-cohora-400" />}
           </div>
           <p className="text-sm text-muted-foreground">@{creator.handle}</p>
           {creator.bio && <p className="text-muted-foreground max-w-2xl">{creator.bio}</p>}
         </div>
         {netValue > 0n && (
-          <div className="flex items-center gap-1.5 rounded-lg border border-arc-600/30 bg-arc-600/5 px-3 py-2 text-sm shrink-0">
-            <TrendingUp className="h-4 w-4 text-arc-400" />
+          <div className="flex items-center gap-1.5 rounded-lg border border-cohora-600/30 bg-cohora-600/5 px-3 py-2 text-sm shrink-0">
+            <TrendingUp className="h-4 w-4 text-cohora-400" />
             <span className="text-muted-foreground">Creator Value</span>
             <span className="font-semibold text-foreground">{formatUsdc(netValue)}</span>
           </div>
@@ -262,7 +262,7 @@ export async function generateMetadata({ params }: PageProps) {
   const { handle } = await params;
   const creator = await getCreator(handle);
   return {
-    title: creator ? `${creator.displayName} — Arcom` : 'Creator not found',
+    title: creator ? `${creator.displayName} — Cohora` : 'Creator not found',
   };
 }
 
@@ -281,7 +281,7 @@ function MediaPreview({ item }: { item: ContentItem }) {
   if (item.type === 'AUDIO') {
     return (
       <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2">
-        <Music className="h-4 w-4 text-arc-400 shrink-0" />
+        <Music className="h-4 w-4 text-cohora-400 shrink-0" />
         <audio src={item.mediaUrl} controls className="w-full h-8" preload="metadata" />
       </div>
     );
@@ -300,7 +300,7 @@ function MediaPreview({ item }: { item: ContentItem }) {
         href={item.mediaUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-sm text-arc-400 hover:underline"
+        className="inline-flex items-center gap-2 text-sm text-cohora-400 hover:underline"
       >
         <Download className="h-4 w-4" />
         Download file

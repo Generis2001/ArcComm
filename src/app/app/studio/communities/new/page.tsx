@@ -56,8 +56,8 @@ export default function NewCommunityPage() {
       <Card>
         <CardHeader className="space-y-2">
           <div className="flex items-center gap-3">
-            <div className="rounded-full bg-arc-500/10 p-2.5">
-              <Users2 className="h-5 w-5 text-arc-400" />
+            <div className="rounded-full bg-cohora-500/10 p-2.5">
+              <Users2 className="h-5 w-5 text-cohora-400" />
             </div>
             <CardTitle>Create Community</CardTitle>
           </div>
@@ -115,7 +115,7 @@ export default function NewCommunityPage() {
                   max={100}
                   value={form.revenueSplitPct}
                   onChange={(e) => setForm({ ...form, revenueSplitPct: Number(e.target.value) })}
-                  className="flex-1 accent-arc-500"
+                  className="flex-1 accent-cohora-500"
                 />
                 <span className="text-sm font-mono w-12 text-right">{form.revenueSplitPct}%</span>
               </div>
@@ -136,7 +136,7 @@ export default function NewCommunityPage() {
               <Button type="button" variant="outline" className="flex-1" onClick={() => router.back()}>
                 Cancel
               </Button>
-              <Button type="submit" variant="arc" className="flex-1" disabled={saving}>
+              <Button type="submit" variant="cohora" className="flex-1" disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Create Community
               </Button>

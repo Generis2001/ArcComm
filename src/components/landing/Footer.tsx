@@ -1,4 +1,3 @@
-import { ArcWordmark } from '@/components/ui/ArcBadge';
 import { LogoWordmark } from '@/components/ui/Logo';
 
 export function Footer() {
@@ -8,12 +7,12 @@ export function Footer() {
         <div className="space-y-3">
           <LogoWordmark size={30} />
           <p className="max-w-lg text-sm leading-6 text-white/[0.54]">
-            Arcom is a creator platform for subscriptions, gated communities, premium content,
+            Cohora is a creator platform for subscriptions, gated communities, premium content,
             and digital products paid in USDC on Arc Testnet.
           </p>
         </div>
 
-        <ArcWordmark />
+        <p className="text-sm text-white/[0.54]">Built on Arc Network.</p>
       </div>
     </footer>
   );

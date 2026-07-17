@@ -162,7 +162,7 @@ export default function StudioProfilePage() {
             type="button"
             onClick={() => bannerFileRef.current?.click()}
             disabled={uploadingBanner}
-            className="relative group w-full h-32 rounded-lg overflow-hidden border-2 border-dashed border-input hover:border-arc-400 transition-colors bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="relative group w-full h-32 rounded-lg overflow-hidden border-2 border-dashed border-input hover:border-cohora-400 transition-colors bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             {bannerUrl ? (
               <Image src={bannerUrl} alt="Banner" fill className="object-cover" />
@@ -172,7 +172,7 @@ export default function StudioProfilePage() {
                   <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                 ) : (
                   <>
-                    <ImagePlus className="h-6 w-6 text-muted-foreground group-hover:text-arc-400 transition-colors" />
+                    <ImagePlus className="h-6 w-6 text-muted-foreground group-hover:text-cohora-400 transition-colors" />
                     <span className="text-xs text-muted-foreground">Click to upload banner</span>
                   </>
                 )}
@@ -208,7 +208,7 @@ export default function StudioProfilePage() {
             type="button"
             onClick={() => avatarFileRef.current?.click()}
             disabled={uploadingAvatar}
-            className="relative group h-20 w-20 rounded-full overflow-hidden border-2 border-dashed border-input hover:border-arc-400 transition-colors bg-muted flex-shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="relative group h-20 w-20 rounded-full overflow-hidden border-2 border-dashed border-input hover:border-cohora-400 transition-colors bg-muted flex-shrink-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             {avatarUrl ? (
               <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
@@ -217,7 +217,7 @@ export default function StudioProfilePage() {
                 {uploadingAvatar ? (
                   <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                 ) : (
-                  <Camera className="h-5 w-5 text-muted-foreground group-hover:text-arc-400 transition-colors" />
+                  <Camera className="h-5 w-5 text-muted-foreground group-hover:text-cohora-400 transition-colors" />
                 )}
               </div>
             )}
@@ -289,7 +289,7 @@ export default function StudioProfilePage() {
             {success && <p className="text-sm text-green-400 rounded-md bg-green-500/10 px-3 py-2">{success}</p>}
 
             <div className="flex gap-3 pt-2">
-              <Button type="submit" variant="arc" disabled={saving}>
+              <Button type="submit" variant="cohora" disabled={saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Save Changes
               </Button>
@@ -310,7 +310,7 @@ export default function StudioProfilePage() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium">Delete Arcom account</p>
+            <p className="text-sm font-medium">Delete Cohora account</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               Permanently deletes your profile, creator content, purchases, and account data.
             </p>
@@ -342,9 +342,9 @@ export default function StudioProfilePage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete your Arcom account?</DialogTitle>
+            <DialogTitle>Delete your Cohora account?</DialogTitle>
             <DialogDescription>
-              This permanently removes your profile, creator content, purchases, and connected Arcom account. This cannot be undone.
+              This permanently removes your profile, creator content, purchases, and connected Cohora account. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleDeleteAccount} className="space-y-4">

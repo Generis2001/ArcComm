@@ -49,7 +49,7 @@ export function EarningsCard({ onWithdraw }: EarningsCardProps) {
         label="Total Earned"
         value={`${data.totalEarned} USDC`}
         sublabel="All time"
-        color="text-arc-400"
+        color="text-cohora-400"
       />
 
       <Card className="flex flex-col justify-between">
@@ -59,7 +59,7 @@ export function EarningsCard({ onWithdraw }: EarningsCardProps) {
         <CardContent>
           <p className="text-lg font-bold mb-3">{data.availableToWithdraw} USDC</p>
           <Button
-            variant="arc"
+            variant="cohora"
             size="sm"
             className="w-full gap-2"
             onClick={onWithdraw}

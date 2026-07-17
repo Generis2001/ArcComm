@@ -5,7 +5,7 @@ export const privyConfig: PrivyClientConfig = {
   appearance: {
     theme: 'dark',
     accentColor: '#F5F5F5',
-    logo: '/assets/logo.svg',
+    logo: '/assets/cohora-logo.svg',
   },
   embeddedWallets: {
     createOnLogin: 'users-without-wallets',

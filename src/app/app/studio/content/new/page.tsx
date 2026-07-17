@@ -234,7 +234,7 @@ export default function NewContentPage() {
       {/* Static NSFW warning */}
       <div className="rounded-lg border border-destructive/[0.40] bg-destructive/[0.05] px-4 py-3 flex items-start gap-3">
         <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on Arcom.</p>
+        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on Cohora.</p>
       </div>
 
       {/* Dynamic NSFW blocked banner */}
@@ -244,7 +244,7 @@ export default function NewContentPage() {
           <div className="space-y-1">
             <p className="text-sm font-semibold text-destructive">Content blocked by automatic moderation</p>
             <p className="text-sm text-destructive/[0.80]">
-              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates Arcom community standards and is strictly prohibited.
+              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates Cohora community standards and is strictly prohibited.
             </p>
           </div>
         </div>
@@ -252,9 +252,9 @@ export default function NewContentPage() {
 
       {/* Listing fee step */}
       {!feePaid ? (
-        <div className="rounded-lg border border-arc-600/30 bg-arc-600/5 px-4 py-3 space-y-3">
+        <div className="rounded-lg border border-cohora-600/30 bg-cohora-600/5 px-4 py-3 space-y-3">
           <div className="flex items-start gap-3 text-sm text-muted-foreground">
-            <Wallet className="h-4 w-4 mt-0.5 shrink-0 text-arc-400" />
+            <Wallet className="h-4 w-4 mt-0.5 shrink-0 text-cohora-400" />
             <span>Publishing requires a <strong className="text-foreground">2 USDC listing fee</strong> paid from your wallet.</span>
           </div>
           {feeError && (
@@ -263,7 +263,7 @@ export default function NewContentPage() {
               <button type="button" onClick={resetFee} className="ml-2 underline">Retry</button>
             </p>
           )}
-          <Button variant="arc" size="sm" onClick={handlePayFee} disabled={feeInProgress}>
+          <Button variant="cohora" size="sm" onClick={handlePayFee} disabled={feeInProgress}>
             {feeInProgress && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {feeStep === 'waiting_wallet' ? 'Confirm in wallet...' : feeStep === 'confirming' ? 'Confirming on-chain...' : 'Pay 2 USDC Listing Fee'}
           </Button>
@@ -293,8 +293,8 @@ export default function NewContentPage() {
                     onClick={() => handleTypeChange(t)}
                     className={`rounded-md border px-2 py-2 text-xs font-medium transition-colors ${
                       form.type === t
-                        ? 'border-arc-600 bg-arc-600/10 text-arc-400'
-                        : 'border-border text-muted-foreground hover:border-arc-600/40'
+                        ? 'border-cohora-600 bg-cohora-600/10 text-cohora-400'
+                        : 'border-border text-muted-foreground hover:border-cohora-600/40'
                     }`}
                   >
                     {t === 'ARTICLE' ? 'Article' : t === 'IMAGE_GALLERY' ? 'Image' : TYPE_LABEL[t]}
@@ -345,7 +345,7 @@ export default function NewContentPage() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="w-full rounded-lg border-2 border-dashed border-border hover:border-arc-600/40 px-4 py-8 flex flex-col items-center gap-2 text-muted-foreground transition-colors"
+                    className="w-full rounded-lg border-2 border-dashed border-border hover:border-cohora-600/40 px-4 py-8 flex flex-col items-center gap-2 text-muted-foreground transition-colors"
                   >
                     <Upload className="h-6 w-6" />
                     <span className="text-sm">Click to select {TYPE_LABEL[form.type].toLowerCase()}</span>
@@ -355,7 +355,7 @@ export default function NewContentPage() {
                   <div className="rounded-lg border border-border px-3 py-2.5 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                       {scanning || uploading ? (
-                        <Loader2 className="h-4 w-4 animate-spin text-arc-400 shrink-0" />
+                        <Loader2 className="h-4 w-4 animate-spin text-cohora-400 shrink-0" />
                       ) : mediaUrl ? (
                         <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
                       ) : (
@@ -417,7 +417,7 @@ export default function NewContentPage() {
             <div className="flex gap-3 pt-2">
               <Button
                 type="submit"
-                variant="arc"
+                variant="cohora"
                 disabled={!feePaid || saving || uploading || scanning || (needsUpload && !mediaUrl)}
               >
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

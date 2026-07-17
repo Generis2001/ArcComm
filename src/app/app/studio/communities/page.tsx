@@ -15,7 +15,7 @@ export default function StudioCommunitiesPage() {
           <h2 className="text-lg font-semibold">Communities</h2>
           <p className="text-sm text-muted-foreground">Create and manage your subscriber communities.</p>
         </div>
-        <Button variant="arc" size="sm" asChild>
+        <Button variant="cohora" size="sm" asChild>
           <Link href="/app/studio/communities/new">
             <Plus className="mr-2 h-4 w-4" />
             New Community
@@ -34,7 +34,7 @@ export default function StudioCommunitiesPage() {
           <Users2 className="h-10 w-10 text-muted-foreground" />
           <p className="font-medium">No communities yet</p>
           <p className="text-sm text-muted-foreground">Create your first community to start engaging with subscribers.</p>
-          <Button variant="arc" size="sm" asChild>
+          <Button variant="cohora" size="sm" asChild>
             <Link href="/app/studio/communities/new">Create Community</Link>
           </Button>
         </div>

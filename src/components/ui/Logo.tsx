@@ -24,7 +24,7 @@ export function LogoMark({ size = 28, className }: LogoMarkProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn('text-foreground', className)}
-      aria-label="Arcom"
+      aria-label="Cohora"
       role="img"
     >
       <rect x="1" y="1" width="46" height="42" rx="14" stroke="currentColor" strokeOpacity="0.18" />
@@ -39,10 +39,9 @@ interface LogoWordmarkProps {
 }
 
 /**
- * ArcomA — renders a capital 'A' whose crossbar is replaced by a smooth arc
- * (part of a circle's circumference) that curves upward between the two legs.
+ * Cohora wordmark glyph with a curved crossbar.
  */
-function ArcomA({ size }: { size: number }) {
+function CohoraA({ size }: { size: number }) {
   // Proportions relative to font-size so the glyph scales with the wordmark
   const H = size;                        // glyph height
   const W = Math.round(size * 0.68);     // glyph width  (~68% of height, typical A)
@@ -56,9 +55,9 @@ function ArcomA({ size }: { size: number }) {
   // Right leg mirror
   const rx = W - lx;
 
-  // Arc radius — slightly larger than chord/2 gives a pleasing upward curve
+  // A radius slightly larger than half the chord creates the upward curve.
   const chord = rx - lx;
-  const arcR  = chord * 0.72;
+  const curveRadius = chord * 0.72;
 
   return (
     <svg
@@ -76,11 +75,11 @@ function ArcomA({ size }: { size: number }) {
       <line x1={cx} y1={0} x2={W} y2={H}
         stroke="white" strokeWidth={sw} strokeLinecap="round" />
       {/*
-        Arc crossbar — SVG arc from lx→rx at crossY, sweeping UPWARD.
+        Curved crossbar from lx to rx at crossY, sweeping upward.
         sweep-flag=0 (counter-clockwise) gives the upward arch shape.
       */}
       <path
-        d={`M ${lx} ${crossY} A ${arcR} ${arcR} 0 0 0 ${rx} ${crossY}`}
+        d={`M ${lx} ${crossY} A ${curveRadius} ${curveRadius} 0 0 0 ${rx} ${crossY}`}
         stroke="white"
         strokeWidth={sw}
         strokeLinecap="round"
@@ -104,10 +103,10 @@ export function LogoWordmark({ size = 28, className }: LogoWordmarkProps) {
       <span
         className="flex items-end leading-none"
         style={{ gap: 0 }}
-        aria-label="Arcom"
+        aria-label="Cohora"
         role="img"
       >
-        <ArcomA size={fontSize} />
+        <CohoraA size={fontSize} />
         <span
           className="font-semibold tracking-[-0.04em] text-white/[0.60]"
           style={{ fontSize, lineHeight: 1, marginBottom: Math.round(fontSize * 0.04) }}

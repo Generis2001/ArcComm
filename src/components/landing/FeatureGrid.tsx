@@ -19,7 +19,7 @@ const productFeatures = [
     ),
     title: 'Subscriptions in USDC',
     description:
-      'Fans subscribe with USDC on Arc Testnet and Arcom tracks access based on the active subscription state.',
+      'Fans subscribe with USDC on Arc Testnet and Cohora tracks access based on the active subscription state.',
   },
   {
     icon: () => (
@@ -40,7 +40,7 @@ const productFeatures = [
     ),
     title: 'Paid communities',
     description:
-      'Arcom lets creators open subscriber communities with entry fees and member-only participation.',
+      'Cohora lets creators open subscriber communities with entry fees and member-only participation.',
   },
   {
     icon: () => (
@@ -59,7 +59,7 @@ const productFeatures = [
 const workflow = [
   'Connect a wallet and create a creator profile.',
   'Set up subscriptions, community access, content, or digital products.',
-  'Receive USDC payments and manage fans from the Arcom app.',
+  'Receive USDC payments and manage fans from Cohora.',
 ];
 
 export function FeatureGrid() {
@@ -68,16 +68,16 @@ export function FeatureGrid() {
       <div className="mx-auto max-w-6xl space-y-20">
 
         {/* ── Product section ── */}
-        <section id="product" className="arc-panel arc-watermark overflow-hidden p-6 md:p-8" data-watermark="PRODUCT">
+        <section id="product" className="cohora-panel cohora-watermark overflow-hidden p-6 md:p-8" data-watermark="PRODUCT">
           <div className="relative z-10 space-y-8">
             <div className="max-w-3xl space-y-4">
-              <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">What Arcom does</p>
+              <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">What Cohora does</p>
               <h2 className="text-3xl font-semibold tracking-[-0.06em] text-white md:text-5xl">
-                Arcom gives creators one place to publish, charge, and manage access.
+                Cohora gives creators one place to publish, charge, and manage access.
               </h2>
-              <p className="arc-copy max-w-2xl">
+              <p className="cohora-copy max-w-2xl">
                 The platform combines creator onboarding, paid content, subscriptions, digital
-                products, and member communities in one Arc-native workflow.
+                products, and member communities in one workflow built on Arc Network.
               </p>
             </div>
 
@@ -98,12 +98,12 @@ export function FeatureGrid() {
         <section id="experience" className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_360px]">
 
           {/* How it works */}
-          <div className="arc-panel arc-watermark p-6 md:p-8" data-watermark="ACCESS">
+          <div className="cohora-panel cohora-watermark p-6 md:p-8" data-watermark="ACCESS">
             <div className="relative z-10 space-y-8">
               <div className="space-y-3">
                 <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">How it works</p>
                 <h3 className="text-2xl font-semibold tracking-[-0.05em] text-white md:text-3xl">
-                  Arcom connects wallet payments directly to creator access.
+                  Cohora connects wallet payments directly to creator access.
                 </h3>
               </div>
 
@@ -123,7 +123,7 @@ export function FeatureGrid() {
 
           {/* Who it's for */}
           <div id="workflow">
-            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">Who Arcom is for</p>
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.42]">Who Cohora is for</p>
             <ul className="mt-6 space-y-6">
               {[
                 'Creators who want paid subscriber access in USDC.',

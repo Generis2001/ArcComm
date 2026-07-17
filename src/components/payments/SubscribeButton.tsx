@@ -23,7 +23,7 @@ export function SubscribeButton({ creatorId, tier, size = 'default' }: Subscribe
 
   if (isLoading) {
     return (
-      <Button variant="arc" size={size} disabled className="w-full">
+      <Button variant="cohora" size={size} disabled className="w-full">
         <Loader2 className="h-4 w-4 animate-spin" />
       </Button>
     );
@@ -40,7 +40,7 @@ export function SubscribeButton({ creatorId, tier, size = 'default' }: Subscribe
 
   return (
     <>
-      <Button variant="arc" size={size} className="w-full" onClick={() => setOpen(true)}>
+      <Button variant="cohora" size={size} className="w-full" onClick={() => setOpen(true)}>
         Subscribe · {formatUsdc(BigInt(tier.priceUsdc))} / {tier.intervalDays}d
       </Button>
 

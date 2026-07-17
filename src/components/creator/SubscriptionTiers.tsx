@@ -46,7 +46,7 @@ function TierCard({ tier, creatorId }: { tier: SubscriptionTierPublic; creatorId
         <ul className="space-y-1.5 flex-1">
           {tier.perks.map((perk) => (
             <li key={perk} className="flex items-start gap-2 text-sm">
-              <CheckCircle2 className="h-4 w-4 text-arc-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-4 w-4 text-cohora-400 shrink-0 mt-0.5" />
               <span>{perk}</span>
             </li>
           ))}

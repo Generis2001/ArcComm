@@ -93,7 +93,7 @@ export function SidebarFooter({ compact = false }: { compact?: boolean }) {
           </Button>
         ) : (
           <Button
-            variant="arc"
+            variant="cohora"
             size="sm"
             className="w-full justify-between"
             onClick={() => connectWallet()}

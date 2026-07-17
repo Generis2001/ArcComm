@@ -87,7 +87,7 @@ export function PostCard({ post, communityId, canInteract }: PostCardProps) {
         {post.creator.user.avatarUrl ? (
           <Image src={post.creator.user.avatarUrl} alt="" width={32} height={32} className="rounded-full object-cover" />
         ) : (
-          <div className="h-8 w-8 rounded-full bg-arc-500/20 flex items-center justify-center text-xs font-bold text-arc-400">
+          <div className="h-8 w-8 rounded-full bg-cohora-500/20 flex items-center justify-center text-xs font-bold text-cohora-400">
             {post.creator.displayName[0]}
           </div>
         )}
@@ -110,7 +110,7 @@ export function PostCard({ post, communityId, canInteract }: PostCardProps) {
           href={post.mediaUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 text-sm text-arc-400 hover:underline"
+          className="flex items-center gap-2 text-sm text-cohora-400 hover:underline"
         >
           <Download className="h-4 w-4" />
           Download attachment
@@ -128,7 +128,7 @@ export function PostCard({ post, communityId, canInteract }: PostCardProps) {
         </button>
         <button
           onClick={toggleComments}
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-arc-400 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-cohora-400 transition-colors"
         >
           <MessageCircle className="h-4 w-4" />
           {post.commentCount}
@@ -153,7 +153,7 @@ export function PostCard({ post, communityId, canInteract }: PostCardProps) {
                 placeholder="Add a comment..."
                 className="flex-1 rounded-md border border-input bg-background px-3 py-1.5 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
-              <Button type="submit" size="sm" variant="arc" disabled={submitting || !commentText.trim()}>
+              <Button type="submit" size="sm" variant="cohora" disabled={submitting || !commentText.trim()}>
                 Post
               </Button>
             </form>

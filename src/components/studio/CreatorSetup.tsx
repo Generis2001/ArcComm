@@ -72,7 +72,7 @@ export function CreatorSetup() {
   };
 
   return (
-    <div className="arc-shell flex min-h-screen items-center justify-center p-6">
+    <div className="cohora-shell flex min-h-screen items-center justify-center p-6">
       <Card className="w-full max-w-md border-white/[0.10] bg-black/[0.72]">
         <CardHeader className="text-center space-y-3">
           <div className="flex justify-center">
@@ -80,9 +80,9 @@ export function CreatorSetup() {
               <Clapperboard className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle>Create your Arcom profile</CardTitle>
+          <CardTitle>Create your Cohora profile</CardTitle>
           <p className="text-sm text-white/[0.58]">
-            Complete this profile before entering Arcom. It is used for your public creator page,
+            Complete this profile before entering Cohora. It is used for your public creator page,
             content, products, and communities.
           </p>
         </CardHeader>
@@ -167,7 +167,7 @@ export function CreatorSetup() {
               <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
 
-            <Button type="submit" variant="arc" className="w-full" disabled={saving || uploading}>
+            <Button type="submit" variant="cohora" className="w-full" disabled={saving || uploading}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {saving ? 'Creating Profile...' : 'Create Profile'}
             </Button>

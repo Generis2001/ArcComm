@@ -50,7 +50,7 @@ function ContentModal({ content, open, onClose }: { content: PurchasedContent; o
           <DialogTitle>{content.title}</DialogTitle>
           <p className="text-sm text-muted-foreground">
             by{' '}
-            <Link href={`/app/creator/${content.creator.handle}`} className="hover:text-arc-400 transition-colors" onClick={onClose}>
+            <Link href={`/app/creator/${content.creator.handle}`} className="hover:text-cohora-400 transition-colors" onClick={onClose}>
               {content.creator.displayName}
             </Link>
           </p>
@@ -70,7 +70,7 @@ function ContentModal({ content, open, onClose }: { content: PurchasedContent; o
 
           {content.type === 'AUDIO' && content.mediaUrl && (
             <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-4 py-4">
-              <Music className="h-6 w-6 text-arc-400 shrink-0" />
+              <Music className="h-6 w-6 text-cohora-400 shrink-0" />
               <audio src={content.mediaUrl} controls className="w-full" preload="metadata" />
             </div>
           )}
@@ -82,9 +82,9 @@ function ContentModal({ content, open, onClose }: { content: PurchasedContent; o
 
           {content.type === 'FILE' && content.mediaUrl && (
             <div className="flex flex-col items-center gap-4 py-6">
-              <Download className="h-12 w-12 text-arc-400" />
+              <Download className="h-12 w-12 text-cohora-400" />
               <p className="text-sm text-muted-foreground">Your file is ready to download.</p>
-              <Button variant="arc" asChild>
+              <Button variant="cohora" asChild>
                 <a href={content.mediaUrl} target="_blank" rel="noopener noreferrer" download>
                   <Download className="mr-2 h-4 w-4" />
                   Download File
@@ -131,9 +131,9 @@ export default function PurchasesPage() {
           <div className="space-y-2">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Purchases</p>
             <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Content and products you own.</h1>
-            <p className="text-sm text-white/[0.56]">Open paid content and downloads purchased from Arcom creators.</p>
+            <p className="text-sm text-white/[0.56]">Open paid content and downloads purchased from Cohora creators.</p>
           </div>
-          <Button variant="arc" size="sm" asChild>
+          <Button variant="cohora" size="sm" asChild>
             <Link href="/app/explore">
               <Compass className="mr-2 h-4 w-4" />
               Explore creators
@@ -163,13 +163,13 @@ export default function PurchasesPage() {
             return (
               <Card
                 key={purchase.id}
-                className={isViewable ? 'cursor-pointer hover:border-arc-600/50 transition-colors' : ''}
+                className={isViewable ? 'cursor-pointer hover:border-cohora-600/50 transition-colors' : ''}
                 onClick={() => isViewable && purchase.content && setSelected(purchase.content)}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
-                      <TypeIcon className="h-4 w-4 text-arc-400 shrink-0" />
+                      <TypeIcon className="h-4 w-4 text-cohora-400 shrink-0" />
                       <CardTitle className="text-base truncate">{label}</CardTitle>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -186,7 +186,7 @@ export default function PurchasesPage() {
                       <p>
                         From:{' '}
                         <span
-                          className="text-foreground hover:text-arc-400 transition-colors cursor-pointer"
+                          className="text-foreground hover:text-cohora-400 transition-colors cursor-pointer"
                           onClick={(e) => { e.stopPropagation(); }}
                         >
                           <Link href={`/app/creator/${creator.handle}`} onClick={(e) => e.stopPropagation()}>
@@ -199,7 +199,7 @@ export default function PurchasesPage() {
                     <p>{new Date(purchase.createdAt).toLocaleDateString()}</p>
                   </div>
                   {isViewable && (
-                    <p className="text-xs text-arc-400 font-medium">Click to view →</p>
+                    <p className="text-xs text-cohora-400 font-medium">Click to view →</p>
                   )}
                 </CardContent>
               </Card>

@@ -145,7 +145,7 @@ export function WithdrawModal({ open, onOpenChange, maxAmount, defaultAddress }:
                 Cancel
               </Button>
               <Button
-                variant="arc"
+                variant="cohora"
                 onClick={handleSubmit}
                 disabled={step === 'confirming' || !amount || !toAddress}
               >

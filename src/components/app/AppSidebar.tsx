@@ -13,8 +13,7 @@ import {
   Store,
   Users2,
 } from 'lucide-react';
-import { ArcSymbolBadge, ArcWordmark } from '@/components/ui/ArcBadge';
-import { LogoWordmark } from '@/components/ui/Logo';
+import { LogoMark, LogoWordmark } from '@/components/ui/Logo';
 import { SidebarFooter } from '@/components/app/SidebarFooter';
 import { cn } from '@/lib/utils/cn';
 
@@ -90,10 +89,10 @@ export function AppSidebar() {
             <LogoWordmark size={28} />
           </Link>
 
-          {/* Collapsed state: show just the Arc badge as logo */}
+          {/* Collapsed state: keep Cohora, not network infrastructure, as the app identity. */}
           {!isOpen && (
             <Link href="/app" className="mx-auto block">
-              <ArcSymbolBadge className="h-9 w-9" />
+              <LogoMark size={28} />
             </Link>
           )}
 
@@ -145,17 +144,14 @@ export function AppSidebar() {
 
         {/* ── Footer: Built on + balance/wallet ── */}
         <div className="space-y-4">
-          {/* Built on Arc */}
-          <div className={cn('flex items-center gap-2 px-1 py-2', !isOpen && 'justify-center')}>
-            {isOpen ? (
-              <>
-                <ArcWordmark className="h-4" />
-                <ArcSymbolBadge className="h-7 w-7 ml-auto" />
-              </>
-            ) : (
-              <ArcSymbolBadge className="h-7 w-7" />
+          <p
+            className={cn(
+              'px-1 text-xs text-white/[0.46]',
+              !isOpen && 'sr-only',
             )}
-          </div>
+          >
+            Built on Arc Network
+          </p>
 
           {/* Only render SidebarFooter when expanded to avoid layout thrash */}
           <div

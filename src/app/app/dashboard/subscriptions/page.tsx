@@ -126,7 +126,7 @@ export default function SubscriptionsPage() {
                     <CardTitle className="text-base">
                       <Link
                         href={`/app/creator/${sub.creator.handle}`}
-                        className="transition-colors hover:text-arc-400"
+                        className="transition-colors hover:text-cohora-400"
                       >
                         {sub.creator.displayName}
                       </Link>

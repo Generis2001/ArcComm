@@ -1,4 +1,4 @@
-# ArcCom Deployment Instructions
+# Cohora Deployment Instructions
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@
 
 ```bash
 # Clone and install
-cd arccom
+cd cohora
 npm install
 
 # Copy env
@@ -67,7 +67,7 @@ NEXT_PUBLIC_SUBSCRIPTION_MANAGER_ADDRESS=0x...
 ## Step 4 — Run Locally
 
 ```bash
-cd ..   # back to arccom root
+cd ..   # back to cohora root
 npm run dev
 ```
 

@@ -82,7 +82,7 @@ export default function StudioStorePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Digital Store</h2>
-        <Button variant="arc" size="sm" onClick={handleOpen}>
+        <Button variant="cohora" size="sm" onClick={handleOpen}>
           <PlusCircle className="mr-2 h-4 w-4" />
           New Product
         </Button>
@@ -96,7 +96,7 @@ export default function StudioStorePage() {
         <div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
           <ShoppingBag className="h-10 w-10 text-muted-foreground/40" />
           <p className="text-muted-foreground">No products yet.</p>
-          <Button variant="arc" size="sm" onClick={handleOpen}>Add your first product</Button>
+          <Button variant="cohora" size="sm" onClick={handleOpen}>Add your first product</Button>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
@@ -131,9 +131,9 @@ export default function StudioStorePage() {
 
           {/* Step 1: pay listing fee */}
           {!feePaid ? (
-            <div className="rounded-lg border border-arc-600/30 bg-arc-600/5 px-3 py-3 space-y-3">
+            <div className="rounded-lg border border-cohora-600/30 bg-cohora-600/5 px-3 py-3 space-y-3">
               <div className="flex items-start gap-2 text-xs text-muted-foreground">
-                <Wallet className="h-3.5 w-3.5 mt-0.5 shrink-0 text-arc-400" />
+                <Wallet className="h-3.5 w-3.5 mt-0.5 shrink-0 text-cohora-400" />
                 <span>Listing a product requires a <strong className="text-foreground">2 USDC fee</strong> paid from your wallet before saving.</span>
               </div>
               {feeError && (
@@ -142,7 +142,7 @@ export default function StudioStorePage() {
                   <button type="button" onClick={resetFee} className="ml-2 underline">Retry</button>
                 </p>
               )}
-              <Button variant="arc" size="sm" onClick={handlePayFee} disabled={feeInProgress}>
+              <Button variant="cohora" size="sm" onClick={handlePayFee} disabled={feeInProgress}>
                 {feeInProgress && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
                 {feeStep === 'waiting_wallet' ? 'Confirm in wallet...' : feeStep === 'confirming' ? 'Confirming...' : 'Pay 2 USDC Listing Fee'}
               </Button>
@@ -176,7 +176,7 @@ export default function StudioStorePage() {
               <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{error}</p>
             )}
             <div className="flex gap-3 pt-1">
-              <Button type="submit" variant="arc" disabled={!feePaid || saving}>
+              <Button type="submit" variant="cohora" disabled={!feePaid || saving}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {saving ? 'Creating...' : 'Create Product'}
               </Button>
