@@ -6,9 +6,12 @@ import { usePrivy } from '@privy-io/react-auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Loader2, PlusCircle, FileText, EyeOff, Eye, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { formatUsdc } from '@/lib/payments/usdc';
+import { ItemMenu } from '@/components/ui/ItemMenu';
 
 interface ContentItem {
   id: string;
@@ -20,11 +23,14 @@ interface ContentItem {
   moderationStatus: string;
   salesCount: number;
   createdAt: string;
+  description?: string;
 }
 
-function useTogglePublished() {
+export default function StudioContentPage() {
   const { getAccessToken } = usePrivy();
   const queryClient = useQueryClient();
+
+  // ── toggle published ────────────────────────────────────────────────────────
   const [pending, setPending] = useState<string | null>(null);
   const [toggleError, setToggleError] = useState<string | null>(null);
 
@@ -49,13 +55,58 @@ function useTogglePublished() {
     }
   }
 
-  return { toggle, pending, toggleError };
-}
+  // ── edit dialog ─────────────────────────────────────────────────────────────
+  const [editItem, setEditItem] = useState<ContentItem | null>(null);
+  const [editForm, setEditForm] = useState({ title: '', description: '' });
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState('');
 
-export default function StudioContentPage() {
-  const { getAccessToken } = usePrivy();
-  const { toggle, pending, toggleError } = useTogglePublished();
+  function openEdit(item: ContentItem) {
+    setEditItem(item);
+    setEditForm({ title: item.title, description: item.description ?? '' });
+    setEditError('');
+  }
 
+  async function saveEdit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editItem) return;
+    setEditSaving(true);
+    setEditError('');
+    try {
+      const token = await getAccessToken();
+      const res = await fetch(`/api/studio/content/${editItem.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title: editForm.title, description: editForm.description }),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error ?? 'Failed to save');
+      }
+      queryClient.invalidateQueries({ queryKey: ['studio-content'] });
+      setEditItem(null);
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setEditSaving(false);
+    }
+  }
+
+  // ── delete ──────────────────────────────────────────────────────────────────
+  async function deleteContent(id: string) {
+    try {
+      const token = await getAccessToken();
+      await fetch(`/api/studio/content/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      queryClient.invalidateQueries({ queryKey: ['studio-content'] });
+    } catch {
+      // silent — item will still show until next refetch
+    }
+  }
+
+  // ── query ───────────────────────────────────────────────────────────────────
   const { data, isLoading } = useQuery({
     queryKey: ['studio-content'],
     queryFn: async () => {
@@ -115,16 +166,21 @@ export default function StudioContentPage() {
                           {item.isPublished ? 'Listed' : 'Delisted'}
                         </Badge>
                       )}
+                      {/* ⋮ menu */}
+                      <ItemMenu
+                        onEdit={() => openEdit(item)}
+                        onDelete={() => deleteContent(item.id)}
+                      />
                     </div>
                   </div>
                 </CardHeader>
 
-                {/* Moderation notice for flagged content */}
+                {/* Moderation notice */}
                 {isFlagged && (
                   <div className="mx-4 mb-1 rounded-md border border-destructive/[0.40] bg-destructive/[0.05] px-3 py-2 flex items-start gap-2">
                     <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                     <p className="text-xs text-destructive">
-                      This content has been flagged as potentially violating Cohora community standards and cannot be published until reviewed.
+                      This content has been flagged as potentially violating Arcom community standards and cannot be published until reviewed.
                     </p>
                   </div>
                 )}
@@ -161,6 +217,44 @@ export default function StudioContentPage() {
           })}
         </div>
       )}
+
+      {/* Edit dialog */}
+      <Dialog open={!!editItem} onOpenChange={(v) => { if (!v) setEditItem(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit content</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={saveEdit} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Title</label>
+              <Input
+                value={editForm.title}
+                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                placeholder="Content title"
+                required
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium">Description</label>
+              <Input
+                value={editForm.description}
+                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                placeholder="Optional description"
+              />
+            </div>
+            {editError && (
+              <p className="text-sm text-destructive rounded-md bg-destructive/[0.10] px-3 py-2">{editError}</p>
+            )}
+            <div className="flex gap-3 pt-1">
+              <Button type="submit" variant="cohora" disabled={editSaving}>
+                {editSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {editSaving ? 'Saving…' : 'Save changes'}
+              </Button>
+              <Button type="button" variant="outline" onClick={() => setEditItem(null)}>Cancel</Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

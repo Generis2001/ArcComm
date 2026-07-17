@@ -3,12 +3,13 @@ import { requireAuth } from '@/lib/privy/server';
 import { prisma } from '@/lib/db/client';
 import { toApiError, NotFoundError, ForbiddenError } from '@/lib/utils/errors';
 import { z } from 'zod';
+import { usdcToUnits } from '@/lib/payments/usdc';
 
 const patchSchema = z.object({
-  isPublished: z.boolean().optional(),
-  title: z.string().min(1).max(200).optional(),
-  description: z.string().max(2000).optional(),
+  name: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
   priceUsdc: z.string().optional(),
+  isActive: z.boolean().optional(),
 });
 
 export async function PATCH(
@@ -27,24 +28,23 @@ export async function PATCH(
     });
     if (!user?.creator) throw new NotFoundError('Creator profile');
 
-    const content = await prisma.content.findUnique({ where: { id } });
-    if (!content) throw new NotFoundError('Content');
-    if (content.creatorId !== user.creator.id) throw new ForbiddenError();
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new NotFoundError('Product');
+    if (product.creatorId !== user.creator.id) throw new ForbiddenError();
 
-    if (data.isPublished && content.moderationStatus === 'FLAGGED') {
-      throw new ForbiddenError('Flagged content cannot be published until reviewed by moderation.');
-    }
-
-    const updated = await prisma.content.update({
+    const updated = await prisma.product.update({
       where: { id },
       data: {
-        ...(data.isPublished !== undefined && { isPublished: data.isPublished }),
-        ...(data.title !== undefined && { title: data.title }),
+        ...(data.name !== undefined && { name: data.name }),
         ...(data.description !== undefined && { description: data.description }),
+        ...(data.priceUsdc !== undefined && {
+          priceUsdc: usdcToUnits(parseFloat(data.priceUsdc)),
+        }),
+        ...(data.isActive !== undefined && { isActive: data.isActive }),
       },
     });
 
-    return Response.json({ id: updated.id, isPublished: updated.isPublished });
+    return Response.json({ ...updated, priceUsdc: updated.priceUsdc.toString() });
   } catch (err) {
     return toApiError(err);
   }
@@ -64,11 +64,11 @@ export async function DELETE(
     });
     if (!user?.creator) throw new NotFoundError('Creator profile');
 
-    const content = await prisma.content.findUnique({ where: { id } });
-    if (!content) throw new NotFoundError('Content');
-    if (content.creatorId !== user.creator.id) throw new ForbiddenError();
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new NotFoundError('Product');
+    if (product.creatorId !== user.creator.id) throw new ForbiddenError();
 
-    await prisma.content.delete({ where: { id } });
+    await prisma.product.delete({ where: { id } });
 
     return new Response(null, { status: 204 });
   } catch (err) {
