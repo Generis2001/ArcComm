@@ -2,11 +2,9 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db/client';
 import { SubscriptionTiers } from '@/components/creator/SubscriptionTiers';
 import { PremiumContentSection } from '@/components/creator/PremiumContentSection';
-import { BuyButton } from '@/components/payments/BuyButton';
-import { BadgeCheck, FileText, ShoppingBag, TrendingUp, Download, Music, Film, Image as ImageIcon } from 'lucide-react';
+import { CreatorContentSection, CreatorProductSection } from '@/components/creator/CreatorItemSections';
+import { BadgeCheck, TrendingUp } from 'lucide-react';
 import { formatUsdc } from '@/lib/payments/usdc';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import type { CreatorProfile, ContentItem, ProductItem } from '@/types/creator';
 
 interface PageProps {
@@ -140,70 +138,13 @@ export default async function CreatorProfilePage({ params }: PageProps) {
       {/* Subscription tiers */}
       <SubscriptionTiers creator={creator} />
 
-      {/* Purchasable content */}
-      {purchasableContent.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Content</h2>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {purchasableContent.map((item) => (
-              <Card key={item.id}>
-                <CardContent className="p-4 space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="space-y-0.5 min-w-0">
-                      <p className="font-medium truncate">{item.title}</p>
-                      {item.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
-                      )}
-                    </div>
-                    <Badge variant="outline" className="shrink-0 text-xs">{item.type}</Badge>
-                  </div>
-                  <MediaPreview item={item} />
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs text-muted-foreground">{item.salesCount} {item.salesCount === 1 ? 'sale' : 'sales'}</p>
-                    <BuyButton
-                      creatorId={creator.id}
-                      contentId={item.id}
-                      priceUsdc={BigInt(item.priceUsdc!)}
-                      label={item.title}
-                      type="CONTENT_PURCHASE"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Free content */}
-      {freeContent.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <FileText className="h-4 w-4 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Free Content</h2>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {freeContent.map((item) => (
-              <Card key={item.id}>
-                <CardContent className="p-4 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="font-medium truncate">{item.title}</p>
-                    <Badge variant="secondary" className="text-xs">Free</Badge>
-                  </div>
-                  {item.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
-                  )}
-                  <MediaPreview item={item} />
-                  <p className="text-xs text-muted-foreground">{item.views} views</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Content sections (purchasable + free) — owner sees ⋮ edit/delete menu */}
+      <CreatorContentSection
+        creatorId={creator.id}
+        creatorHandle={creator.handle}
+        purchasableContent={purchasableContent}
+        freeContent={freeContent}
+      />
 
       {premiumContent.length > 0 && (
         <PremiumContentSection
@@ -214,45 +155,12 @@ export default async function CreatorProfilePage({ params }: PageProps) {
         />
       )}
 
-      {/* Products */}
-      {creator.products.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Digital Store</h2>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {creator.products.map((product) => (
-              <Card key={product.id}>
-                {product.imageUrl && (
-                  <div
-                    className="h-32 w-full rounded-t-lg bg-cover bg-center"
-                    style={{ backgroundImage: `url(${product.imageUrl})` }}
-                  />
-                )}
-                <CardContent className="p-4 space-y-2">
-                  <div className="space-y-0.5">
-                    <p className="font-medium">{product.name}</p>
-                    {product.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2">{product.description}</p>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs text-muted-foreground">{product.totalSold} sold</p>
-                    <BuyButton
-                      creatorId={creator.id}
-                      productId={product.id}
-                      priceUsdc={BigInt(product.priceUsdc)}
-                      label={product.name}
-                      type="PRODUCT_PURCHASE"
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* Products — owner sees ⋮ edit/delete menu */}
+      <CreatorProductSection
+        creatorId={creator.id}
+        creatorHandle={creator.handle}
+        products={creator.products}
+      />
 
     </div>
   );
