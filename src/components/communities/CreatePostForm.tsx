@@ -5,6 +5,7 @@ import { usePrivy } from '@privy-io/react-auth';
 import { useQueryClient } from '@tanstack/react-query';
 import { upload } from '@vercel/blob/client';
 import { Button } from '@/components/ui/button';
+import { getUploadErrorMessage } from '@/lib/uploads/errors';
 import { Loader2, Paperclip, X } from 'lucide-react';
 
 interface CreatePostFormProps {
@@ -60,7 +61,7 @@ export function CreatePostForm({ communityId }: CreatePostFormProps) {
       setMediaFile(null);
       queryClient.invalidateQueries({ queryKey: ['community-posts', communityId] });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to post');
+      setError(getUploadErrorMessage(err, 'Failed to post'));
     } finally {
       setSubmitting(false);
       setUploading(false);

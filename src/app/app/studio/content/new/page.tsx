@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, ArrowLeft, Wallet, CheckCircle2, AlertTriangle, Upload, X, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { useListingFee } from '@/hooks/useListingFee';
+import { getUploadErrorMessage, PROHIBITED_CONTENT_MESSAGE } from '@/lib/uploads/errors';
 
 const ACCEPT: Record<string, string> = {
   VIDEO: 'video/mp4,video/mov,video/webm,video/x-matroska',
@@ -145,7 +146,7 @@ export default function NewContentPage() {
         if (result.isNsfw) {
           playNsfwSound();
           setNsfwBlocked(true);
-          setError('This content is prohibited and cannot be uploaded.');
+          setError(PROHIBITED_CONTENT_MESSAGE);
           setMediaFile(null);
           if (fileInputRef.current) fileInputRef.current.value = '';
           setScanning(false);
@@ -175,18 +176,7 @@ export default function NewContentPage() {
       });
       setMediaUrl(blob.url);
     } catch (err) {
-      const rawMsg = err instanceof Error ? err.message : String(err);
-      if (
-        rawMsg.includes('Vercel Blob') ||
-        rawMsg.includes('client token') ||
-        rawMsg.includes('Failed to retrieve') ||
-        rawMsg.includes('Forbidden') ||
-        rawMsg.includes('Unauthorized')
-      ) {
-        setError('This content is prohibited or failed processing.');
-      } else {
-        setError(rawMsg || 'Upload failed.');
-      }
+      setError(getUploadErrorMessage(err));
       setMediaFile(null);
     } finally {
       setUploading(false);
@@ -246,7 +236,7 @@ export default function NewContentPage() {
       {/* Static NSFW warning */}
       <div className="rounded-lg border border-destructive/[0.40] bg-destructive/[0.05] px-4 py-3 flex items-start gap-3">
         <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-        <p className="text-sm text-destructive font-medium">NSFW and prohibited content cannot be uploaded on Arcom.</p>
+        <p className="text-sm text-destructive font-medium">NSFW and prohibited content cannot be uploaded on Cohora.</p>
       </div>
 
       {/* Dynamic NSFW blocked banner */}
@@ -256,7 +246,7 @@ export default function NewContentPage() {
           <div className="space-y-1">
             <p className="text-sm font-semibold text-destructive">Content blocked by automatic moderation</p>
             <p className="text-sm text-destructive/[0.80]">
-              This file was detected as prohibited content (NSFW) and cannot be uploaded. NSFW content violates Arcom community standards and is strictly prohibited.
+              This file was detected as NSFW or sexually explicit content and cannot be uploaded. This content is prohibited by Cohora&apos;s community standards.
             </p>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { upload } from '@vercel/blob/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { getUploadErrorMessage } from '@/lib/uploads/errors';
 import { Loader2, Clapperboard, Camera } from 'lucide-react';
 import Image from 'next/image';
 
@@ -32,12 +33,7 @@ export function CreatorSetup() {
       });
       setAvatarUrl(blob.url);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      if (msg.includes('Vercel Blob') || msg.includes('client token') || msg.includes('Failed to retrieve')) {
-        setError('This content is prohibited or failed processing.');
-      } else {
-        setError(msg || 'Upload failed.');
-      }
+      setError(getUploadErrorMessage(err));
     } finally {
       setUploading(false);
     }
