@@ -32,7 +32,12 @@ export function CreatorSetup() {
       });
       setAvatarUrl(blob.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('Vercel Blob') || msg.includes('client token') || msg.includes('Failed to retrieve')) {
+        setError('This content is prohibited or failed processing.');
+      } else {
+        setError(msg || 'Upload failed.');
+      }
     } finally {
       setUploading(false);
     }
@@ -80,9 +85,9 @@ export function CreatorSetup() {
               <Clapperboard className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle>Create your Cohora profile</CardTitle>
+          <CardTitle>Create your Arcom profile</CardTitle>
           <p className="text-sm text-white/[0.58]">
-            Complete this profile before entering Cohora. It is used for your public creator page,
+            Complete this profile before entering Arcom. It is used for your public creator page,
             content, products, and communities.
           </p>
         </CardHeader>

@@ -30,12 +30,12 @@ export default function AppHomePage() {
       <div className="py-2">
         <div className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-4">
-            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Cohora home</p>
+            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Arcom home</p>
             <h1 className="text-3xl font-semibold tracking-[-0.06em] text-white md:text-5xl">
               Manage subscriptions, access, and creator tools.
             </h1>
             <p className="cohora-copy max-w-xl">
-              Use Cohora to follow creators, unlock paid content, join communities, or manage your
+              Use Arcom to follow creators, unlock paid content, join communities, or manage your
               own profile and products on Arc Testnet.
             </p>
           </div>

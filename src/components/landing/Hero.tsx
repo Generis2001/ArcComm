@@ -18,7 +18,7 @@ export function Hero({ stats }: { stats: LandingStats }) {
               Subscriptions, communities, and digital products for creators on Arc.
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-white/[0.68] md:text-xl">
-              Cohora lets creators create public profiles, publish paid content, run subscriber
+              Arcom lets creators create public profiles, publish paid content, run subscriber
               communities, and sell digital products. Fans connect a wallet, pay in USDC, and get
               access instantly.
             </p>
@@ -30,7 +30,7 @@ export function Hero({ stats }: { stats: LandingStats }) {
               href="#product"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-3 text-sm text-white/[0.72] transition-colors hover:bg-white/[0.07] hover:text-white"
             >
-              See what Cohora does
+              See what Arcom does
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -45,7 +45,7 @@ export function Hero({ stats }: { stats: LandingStats }) {
           <div>
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Creator heartbeat</p>
             <p className="mt-2 text-2xl font-semibold tracking-[-0.05em] text-white">{stats.creatorHeartbeat}</p>
-            <p className="mt-2 text-sm leading-6 text-white/[0.54]">Confirmed creator earnings recorded by Cohora settlements.</p>
+            <p className="mt-2 text-sm leading-6 text-white/[0.54]">Confirmed creator earnings recorded by Arcom settlements.</p>
           </div>
           <div>
             <p className="text-[0.7rem] uppercase tracking-[0.18em] text-white/[0.38]">Active creators</p>

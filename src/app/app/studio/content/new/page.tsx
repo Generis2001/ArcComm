@@ -145,6 +145,7 @@ export default function NewContentPage() {
         if (result.isNsfw) {
           playNsfwSound();
           setNsfwBlocked(true);
+          setError('This content is prohibited and cannot be uploaded.');
           setMediaFile(null);
           if (fileInputRef.current) fileInputRef.current.value = '';
           setScanning(false);
@@ -174,7 +175,18 @@ export default function NewContentPage() {
       });
       setMediaUrl(blob.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      const rawMsg = err instanceof Error ? err.message : String(err);
+      if (
+        rawMsg.includes('Vercel Blob') ||
+        rawMsg.includes('client token') ||
+        rawMsg.includes('Failed to retrieve') ||
+        rawMsg.includes('Forbidden') ||
+        rawMsg.includes('Unauthorized')
+      ) {
+        setError('This content is prohibited or failed processing.');
+      } else {
+        setError(rawMsg || 'Upload failed.');
+      }
       setMediaFile(null);
     } finally {
       setUploading(false);
@@ -234,7 +246,7 @@ export default function NewContentPage() {
       {/* Static NSFW warning */}
       <div className="rounded-lg border border-destructive/[0.40] bg-destructive/[0.05] px-4 py-3 flex items-start gap-3">
         <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
-        <p className="text-sm text-destructive font-medium">NSFW contents are prohibited on Cohora.</p>
+        <p className="text-sm text-destructive font-medium">NSFW and prohibited content cannot be uploaded on Arcom.</p>
       </div>
 
       {/* Dynamic NSFW blocked banner */}
@@ -244,7 +256,7 @@ export default function NewContentPage() {
           <div className="space-y-1">
             <p className="text-sm font-semibold text-destructive">Content blocked by automatic moderation</p>
             <p className="text-sm text-destructive/[0.80]">
-              This file was detected as potentially NSFW and cannot be uploaded. NSFW content violates Cohora community standards and is strictly prohibited.
+              This file was detected as prohibited content (NSFW) and cannot be uploaded. NSFW content violates Arcom community standards and is strictly prohibited.
             </p>
           </div>
         </div>

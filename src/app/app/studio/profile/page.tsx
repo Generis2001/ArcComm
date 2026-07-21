@@ -80,7 +80,12 @@ export default function StudioProfilePage() {
       queryClient.invalidateQueries({ queryKey: ['me'] });
       setSuccess('Image updated.');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('Vercel Blob') || msg.includes('client token') || msg.includes('Failed to retrieve')) {
+        setError('This content is prohibited or failed processing.');
+      } else {
+        setError(msg || 'Upload failed.');
+      }
     } finally {
       setUploading(false);
     }
@@ -310,7 +315,7 @@ export default function StudioProfilePage() {
         </CardHeader>
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium">Delete Cohora account</p>
+            <p className="text-sm font-medium">Delete Arcom account</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               Permanently deletes your profile, creator content, purchases, and account data.
             </p>
@@ -342,9 +347,9 @@ export default function StudioProfilePage() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete your Cohora account?</DialogTitle>
+            <DialogTitle>Delete your Arcom account?</DialogTitle>
             <DialogDescription>
-              This permanently removes your profile, creator content, purchases, and connected Cohora account. This cannot be undone.
+              This permanently removes your profile, creator content, purchases, and connected Arcom account. This cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleDeleteAccount} className="space-y-4">

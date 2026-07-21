@@ -24,7 +24,7 @@ export function LogoMark({ size = 28, className }: LogoMarkProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={cn('text-foreground', className)}
-      aria-label="Cohora"
+      aria-label="Arcom"
       role="img"
     >
       <rect x="1" y="1" width="46" height="42" rx="14" stroke="currentColor" strokeOpacity="0.18" />
@@ -51,7 +51,7 @@ export function LogoWordmark({ size = 28, className }: LogoWordmarkProps) {
       <span
         className="font-semibold leading-none tracking-[0.02em] text-white/[0.60]"
         style={{ fontSize }}
-        aria-label="Cohora"
+        aria-label="Arcom"
         role="img"
       >
         Cohora

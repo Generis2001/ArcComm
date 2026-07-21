@@ -170,7 +170,7 @@ export async function generateMetadata({ params }: PageProps) {
   const { handle } = await params;
   const creator = await getCreator(handle);
   return {
-    title: creator ? `${creator.displayName} — Cohora` : 'Creator not found',
+    title: creator ? `${creator.displayName} — Arcom` : 'Creator not found',
   };
 }
 
