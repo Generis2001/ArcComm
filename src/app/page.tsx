@@ -41,7 +41,6 @@ export default async function LandingPage() {
               <Droplets className="h-3.5 w-3.5" />
               Get Faucet
             </a>
-            <span className="text-xs text-white/[0.54]">Built on Arc Network</span>
           </div>
         </div>
       </nav>

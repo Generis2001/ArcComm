@@ -77,7 +77,7 @@ export function FeatureGrid() {
               </h2>
               <p className="cohora-copy max-w-2xl">
                 The platform combines creator onboarding, paid content, subscriptions, digital
-                products, and member communities in one workflow built on Arc Network.
+                products, and member communities in one workflow built on Arc.
               </p>
             </div>
 

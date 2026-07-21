@@ -12,7 +12,7 @@ export function Footer() {
           </p>
         </div>
 
-        <p className="text-sm text-white/[0.54]">Built on Arc Network.</p>
+        <p className="text-sm text-white/[0.54]">Built on Arc.</p>
       </div>
     </footer>
   );

@@ -150,7 +150,7 @@ export function AppSidebar() {
               !isOpen && 'sr-only',
             )}
           >
-            Built on Arc Network
+            Built on Arc
           </p>
 
           {/* Only render SidebarFooter when expanded to avoid layout thrash */}
