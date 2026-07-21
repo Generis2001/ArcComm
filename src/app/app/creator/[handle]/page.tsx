@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db/client';
 import { SubscriptionTiers } from '@/components/creator/SubscriptionTiers';
 import { PremiumContentSection } from '@/components/creator/PremiumContentSection';
 import { CreatorContentSection, CreatorProductSection } from '@/components/creator/CreatorItemSections';
-import { BadgeCheck, TrendingUp } from 'lucide-react';
+import { BadgeCheck, Download, Music, TrendingUp } from 'lucide-react';
 import { formatUsdc } from '@/lib/payments/usdc';
 import type { CreatorProfile, ContentItem, ProductItem } from '@/types/creator';
 
