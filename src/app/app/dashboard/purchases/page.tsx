@@ -131,7 +131,7 @@ export default function PurchasesPage() {
           <div className="space-y-2">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-white/[0.40]">Purchases</p>
             <h1 className="text-3xl font-semibold tracking-[-0.05em] text-white">Content and products you own.</h1>
-            <p className="text-sm text-white/[0.56]">Open paid content and downloads purchased from Arcom creators.</p>
+            <p className="text-sm text-white/[0.56]">Open paid content and downloads purchased from Cohora creators.</p>
           </div>
           <Button variant="cohora" size="sm" asChild>
             <Link href="/app/explore">

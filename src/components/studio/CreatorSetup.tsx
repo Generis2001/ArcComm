@@ -81,9 +81,9 @@ export function CreatorSetup() {
               <Clapperboard className="h-8 w-8 text-white" />
             </div>
           </div>
-          <CardTitle>Create your Arcom profile</CardTitle>
+          <CardTitle>Create your Cohora profile</CardTitle>
           <p className="text-sm text-white/[0.58]">
-            Complete this profile before entering Arcom. It is used for your public creator page,
+            Complete this profile before entering Cohora. It is used for your public creator page,
             content, products, and communities.
           </p>
         </CardHeader>
