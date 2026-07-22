@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db/client';
 import { SubscriptionTiers } from '@/components/creator/SubscriptionTiers';
 import { PremiumContentSection } from '@/components/creator/PremiumContentSection';
 import { CreatorContentSection, CreatorProductSection } from '@/components/creator/CreatorItemSections';
-import { BadgeCheck, Download, Music, TrendingUp } from 'lucide-react';
+import { BadgeCheck, TrendingUp } from 'lucide-react';
 import { formatUsdc } from '@/lib/payments/usdc';
 import type { CreatorProfile, ContentItem, ProductItem } from '@/types/creator';
 
@@ -172,48 +172,4 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: creator ? `${creator.displayName} — Cohora` : 'Creator not found',
   };
-}
-
-function MediaPreview({ item }: { item: ContentItem }) {
-  if (!item.mediaUrl) return null;
-  if (item.type === 'VIDEO') {
-    return (
-      <video
-        src={item.mediaUrl}
-        controls
-        className="w-full rounded-lg max-h-64 bg-black"
-        preload="metadata"
-      />
-    );
-  }
-  if (item.type === 'AUDIO') {
-    return (
-      <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2">
-        <Music className="h-4 w-4 text-cohora-400 shrink-0" />
-        <audio src={item.mediaUrl} controls className="w-full h-8" preload="metadata" />
-      </div>
-    );
-  }
-  if (item.type === 'IMAGE_GALLERY') {
-    return (
-      <div className="relative w-full h-48 rounded-lg overflow-hidden bg-muted">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={item.mediaUrl} alt={item.title} className="w-full h-full object-cover" />
-      </div>
-    );
-  }
-  if (item.type === 'FILE') {
-    return (
-      <a
-        href={item.mediaUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-sm text-cohora-400 hover:underline"
-      >
-        <Download className="h-4 w-4" />
-        Download file
-      </a>
-    );
-  }
-  return null;
 }

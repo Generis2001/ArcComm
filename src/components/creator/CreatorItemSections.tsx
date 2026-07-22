@@ -10,7 +10,7 @@ import { ItemMenu } from '@/components/ui/ItemMenu';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Loader2, FileText, ShoppingBag } from 'lucide-react';
+import { Download, FileText, Loader2, Music, ShoppingBag } from 'lucide-react';
 import { formatUsdc } from '@/lib/payments/usdc';
 import type { ContentItem, ProductItem } from '@/types/creator';
 
@@ -33,6 +33,55 @@ function useIsOwner(creatorHandle: string) {
   });
 
   return me?.creator?.handle === creatorHandle;
+}
+
+function FreeMediaPreview({ item }: { item: ContentItem }) {
+  if (!item.mediaUrl) return null;
+
+  if (item.type === 'VIDEO') {
+    return (
+      <video
+        src={item.mediaUrl}
+        controls
+        className="max-h-64 w-full rounded-lg bg-black"
+        preload="metadata"
+      />
+    );
+  }
+
+  if (item.type === 'AUDIO') {
+    return (
+      <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2">
+        <Music className="h-4 w-4 shrink-0 text-cohora-400" />
+        <audio src={item.mediaUrl} controls className="h-8 w-full" preload="metadata" />
+      </div>
+    );
+  }
+
+  if (item.type === 'IMAGE_GALLERY') {
+    return (
+      <div className="relative h-48 w-full overflow-hidden rounded-lg bg-muted">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={item.mediaUrl} alt={item.title} className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+
+  if (item.type === 'FILE') {
+    return (
+      <a
+        href={item.mediaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 text-sm text-cohora-400 hover:underline"
+      >
+        <Download className="h-4 w-4" />
+        Download file
+      </a>
+    );
+  }
+
+  return null;
 }
 
 // ── Content cards (purchasable + free) ────────────────────────────────────────
@@ -177,6 +226,7 @@ export function CreatorContentSection({
                   {item.description && (
                     <p className="text-xs text-muted-foreground line-clamp-2">{item.description}</p>
                   )}
+                  <FreeMediaPreview item={item} />
                   <p className="text-xs text-muted-foreground">{item.views} views</p>
                 </CardContent>
               </Card>
