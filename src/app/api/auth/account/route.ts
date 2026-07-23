@@ -1,24 +1,19 @@
 import { NextRequest } from 'next/server';
-import { requireAuth } from '@/lib/privy/server';
+import { privyServer, requireAuth } from '@/lib/privy/server';
 import { prisma } from '@/lib/db/client';
 import { toApiError } from '@/lib/utils/errors';
 
 async function deletePrivyAccount(privyId: string) {
-  const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID;
-  const appSecret = process.env.PRIVY_APP_SECRET;
+  try {
+    await privyServer.deleteUser(privyId);
+  } catch (err) {
+    const status =
+      typeof err === 'object' && err !== null && 'status' in err
+        ? (err as { status?: unknown }).status
+        : undefined;
 
-  if (!appId || !appSecret) {
-    throw new Error('Account deletion is not configured');
-  }
+    if (status === 404) return;
 
-  const credentials = Buffer.from(`${appId}:${appSecret}`).toString('base64');
-  const response = await fetch(`https://auth.privy.io/api/v1/users/${encodeURIComponent(privyId)}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Basic ${credentials}` },
-    cache: 'no-store',
-  });
-
-  if (!response.ok && response.status !== 404) {
     throw new Error('Unable to delete the connected account');
   }
 }

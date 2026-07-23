@@ -1,5 +1,6 @@
 // Client-only — do not import from server components or API routes
 import * as nsfwjs from 'nsfwjs';
+import { NSFW_THRESHOLD } from '@/lib/nsfw/policy';
 
 let modelPromise: Promise<nsfwjs.NSFWJS> | null = null;
 
@@ -10,44 +11,135 @@ export function getNsfwModel(): Promise<nsfwjs.NSFWJS> {
   return modelPromise;
 }
 
-const NSFW_CATEGORIES = ['Porn', 'Sexy', 'Hentai'];
-const NSFW_THRESHOLD = 0.6;
+const VIDEO_FRAME_RATIOS = [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95];
+const EXPLICIT_THRESHOLD = 0.3;
+const SEXY_THRESHOLD = 0.7;
+
+interface ScanResult {
+  isNsfw: boolean;
+  score: number;
+  framesScanned: number;
+}
+
+function getRiskScore(predictions: nsfwjs.predictionType[]): number {
+  const probability = (className: nsfwjs.predictionType['className']) =>
+    predictions.find((prediction) => prediction.className === className)?.probability ?? 0;
+
+  const porn = probability('Porn');
+  const hentai = probability('Hentai');
+  const sexy = probability('Sexy');
+  const explicit = porn + hentai;
+  const combined = explicit + sexy;
+
+  return Math.min(
+    1,
+    Math.max(
+      combined,
+      (explicit / EXPLICIT_THRESHOLD) * NSFW_THRESHOLD,
+      (sexy / SEXY_THRESHOLD) * NSFW_THRESHOLD,
+    ),
+  );
+}
 
 export async function scanImage(
   element: HTMLImageElement | HTMLCanvasElement,
-): Promise<{ isNsfw: boolean; score: number }> {
+): Promise<ScanResult> {
   const model = await getNsfwModel();
   const predictions = await model.classify(element as HTMLImageElement);
-  const score = predictions
-    .filter((p) => NSFW_CATEGORIES.includes(p.className))
-    .reduce((sum, p) => sum + p.probability, 0);
-  return { isNsfw: score > NSFW_THRESHOLD, score };
+  const score = getRiskScore(predictions);
+  return { isNsfw: score >= NSFW_THRESHOLD, score, framesScanned: 1 };
 }
 
-export function extractVideoFrame(file: File): Promise<HTMLCanvasElement> {
+function waitForVideoEvent(
+  video: HTMLVideoElement,
+  eventName: 'loadedmetadata' | 'loadeddata' | 'seeked',
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    const video = document.createElement('video');
-    const url = URL.createObjectURL(file);
-    video.src = url;
-    video.muted = true;
-    video.preload = 'metadata';
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error(`Video moderation timed out while waiting for ${eventName}`));
+    }, 10_000);
 
-    video.onloadedmetadata = () => {
-      video.currentTime = Math.min(1, video.duration / 2);
+    const cleanup = () => {
+      window.clearTimeout(timeout);
+      video.removeEventListener(eventName, handleSuccess);
+      video.removeEventListener('error', handleError);
     };
 
-    video.onseeked = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || 224;
-      canvas.height = video.videoHeight || 224;
-      canvas.getContext('2d')!.drawImage(video, 0, 0, canvas.width, canvas.height);
-      URL.revokeObjectURL(url);
-      resolve(canvas);
+    const handleSuccess = () => {
+      cleanup();
+      resolve();
     };
 
-    video.onerror = () => {
-      URL.revokeObjectURL(url);
+    const handleError = () => {
+      cleanup();
       reject(new Error('Failed to load video for scanning'));
     };
+
+    video.addEventListener(eventName, handleSuccess, { once: true });
+    video.addEventListener('error', handleError, { once: true });
   });
+}
+
+async function seekVideo(video: HTMLVideoElement, time: number): Promise<void> {
+  if (Math.abs(video.currentTime - time) < 0.01 && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    return;
+  }
+
+  const seeked = waitForVideoEvent(video, 'seeked');
+  video.currentTime = time;
+  await seeked;
+}
+
+export async function scanVideo(file: File): Promise<ScanResult> {
+  const model = await getNsfwModel();
+  const video = document.createElement('video');
+  const url = URL.createObjectURL(file);
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+
+  try {
+    const metadataLoaded = waitForVideoEvent(video, 'loadedmetadata');
+    video.src = url;
+    video.load();
+    await metadataLoaded;
+    if (!Number.isFinite(video.duration) || video.duration <= 0) {
+      throw new Error('Video duration is unavailable for moderation');
+    }
+    if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+      await waitForVideoEvent(video, 'loadeddata');
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 224;
+    canvas.height = video.videoHeight || 224;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Video moderation canvas is unavailable');
+
+    let maxScore = 0;
+    let framesScanned = 0;
+
+    for (const ratio of VIDEO_FRAME_RATIOS) {
+      const time = Math.min(video.duration - 0.001, Math.max(0, video.duration * ratio));
+      await seekVideo(video, time);
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const predictions = await model.classify(canvas);
+      const score = getRiskScore(predictions);
+      maxScore = Math.max(maxScore, score);
+      framesScanned += 1;
+
+      if (score >= NSFW_THRESHOLD) {
+        return { isNsfw: true, score: maxScore, framesScanned };
+      }
+    }
+
+    return { isNsfw: false, score: maxScore, framesScanned };
+  } finally {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    URL.revokeObjectURL(url);
+  }
 }

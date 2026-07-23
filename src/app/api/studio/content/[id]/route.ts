@@ -31,8 +31,8 @@ export async function PATCH(
     if (!content) throw new NotFoundError('Content');
     if (content.creatorId !== user.creator.id) throw new ForbiddenError();
 
-    if (data.isPublished && content.moderationStatus === 'FLAGGED') {
-      throw new ForbiddenError('Flagged content cannot be published until reviewed by moderation.');
+    if (data.isPublished && content.moderationStatus !== 'APPROVED') {
+      throw new ForbiddenError('Content cannot be published until it passes moderation.');
     }
 
     const updated = await prisma.content.update({

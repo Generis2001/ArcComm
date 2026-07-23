@@ -151,6 +151,7 @@ export default function StudioContentPage() {
         <div className="grid gap-4">
           {data.map((item) => {
             const isFlagged = item.moderationStatus === 'FLAGGED';
+            const isPending = item.moderationStatus === 'PENDING';
             return (
               <Card key={item.id} className={!item.isPublished ? 'opacity-60' : ''}>
                 <CardHeader className="pb-2">
@@ -161,6 +162,8 @@ export default function StudioContentPage() {
                       {item.isPremium && <Badge variant="default">Premium</Badge>}
                       {isFlagged ? (
                         <Badge variant="destructive">Flagged</Badge>
+                      ) : isPending ? (
+                        <Badge variant="secondary">Pending moderation</Badge>
                       ) : (
                         <Badge variant={item.isPublished ? 'default' : 'secondary'}>
                           {item.isPublished ? 'Listed' : 'Delisted'}
@@ -184,6 +187,14 @@ export default function StudioContentPage() {
                     </p>
                   </div>
                 )}
+                {isPending && (
+                  <div className="mx-4 mb-1 rounded-md border border-border bg-muted/30 px-3 py-2 flex items-start gap-2">
+                    <ShieldAlert className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+                    <p className="text-xs text-muted-foreground">
+                      This older upload is hidden until it passes the current moderation checks.
+                    </p>
+                  </div>
+                )}
 
                 <CardContent className="text-sm text-muted-foreground">
                   {item.priceUsdc && (
@@ -198,8 +209,14 @@ export default function StudioContentPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => toggle(item.id, item.isPublished)}
-                      disabled={pending === item.id || isFlagged}
-                      title={isFlagged ? 'Cannot publish flagged content' : undefined}
+                      disabled={pending === item.id || isFlagged || isPending}
+                      title={
+                        isFlagged
+                          ? 'Cannot publish flagged content'
+                          : isPending
+                            ? 'Cannot publish content pending moderation'
+                            : undefined
+                      }
                       className="h-7 px-2 text-xs"
                     >
                       {pending === item.id ? (

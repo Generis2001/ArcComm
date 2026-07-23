@@ -11,7 +11,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, ArrowLeft, Wallet, CheckCircle2, AlertTriangle, Upload, X, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { useListingFee } from '@/hooks/useListingFee';
-import { getUploadErrorMessage, PROHIBITED_CONTENT_MESSAGE } from '@/lib/uploads/errors';
+import {
+  getUploadErrorMessage,
+  MODERATION_UNAVAILABLE_MESSAGE,
+  PROHIBITED_CONTENT_MESSAGE,
+} from '@/lib/uploads/errors';
 
 const ACCEPT: Record<string, string> = {
   VIDEO: 'video/mp4,video/mov,video/webm,video/x-matroska',
@@ -77,6 +81,7 @@ export default function NewContentPage() {
   const [mediaUrl, setMediaUrl] = useState<string | null>(null);
   const [nsfwBlocked, setNsfwBlocked] = useState(false);
   const [nsfwScore, setNsfwScore] = useState<number | null>(null);
+  const [moderationFrameCount, setModerationFrameCount] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -103,6 +108,7 @@ export default function NewContentPage() {
     setMediaUrl(null);
     setNsfwBlocked(false);
     setNsfwScore(null);
+    setModerationFrameCount(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -117,6 +123,7 @@ export default function NewContentPage() {
     setMediaUrl(null);
     setNsfwBlocked(false);
     setNsfwScore(null);
+    setModerationFrameCount(null);
     setError('');
 
     // NSFW scan for image and video types
@@ -124,8 +131,8 @@ export default function NewContentPage() {
     if (canScan) {
       setScanning(true);
       try {
-        const { scanImage, extractVideoFrame } = await import('@/lib/nsfw/scanner');
-        let element: HTMLImageElement | HTMLCanvasElement;
+        const { scanImage, scanVideo } = await import('@/lib/nsfw/scanner');
+        let result;
 
         if (form.type === 'IMAGE_GALLERY') {
           const img = document.createElement('img');
@@ -135,13 +142,13 @@ export default function NewContentPage() {
             img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Image load failed')); };
             img.src = url;
           });
-          element = img;
+          result = await scanImage(img);
         } else {
-          element = await extractVideoFrame(file);
+          result = await scanVideo(file);
         }
 
-        const result = await scanImage(element);
         setNsfwScore(result.score);
+        setModerationFrameCount(result.framesScanned);
 
         if (result.isNsfw) {
           playNsfwSound();
@@ -153,7 +160,12 @@ export default function NewContentPage() {
           return;
         }
       } catch {
-        // Scan failure is non-blocking — proceed with upload
+        setError(MODERATION_UNAVAILABLE_MESSAGE);
+        setMediaFile(null);
+        setNsfwScore(null);
+        setModerationFrameCount(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
       } finally {
         setScanning(false);
       }
@@ -210,6 +222,7 @@ export default function NewContentPage() {
           priceUsdc: form.priceUsdc || undefined,
           mediaUrl: mediaUrl || undefined,
           nsfwScore: nsfwScore ?? undefined,
+          moderationFrameCount: moderationFrameCount ?? undefined,
         }),
       });
       if (!res.ok) {
@@ -371,7 +384,7 @@ export default function NewContentPage() {
                       {mediaUrl && <span className="text-xs text-green-500">Uploaded</span>}
                       <button
                         type="button"
-                        onClick={() => { setMediaFile(null); setMediaUrl(null); setNsfwBlocked(false); setNsfwScore(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}
+                        onClick={() => { setMediaFile(null); setMediaUrl(null); setNsfwBlocked(false); setNsfwScore(null); setModerationFrameCount(null); if (fileInputRef.current) fileInputRef.current.value = ''; }}
                         className="text-muted-foreground hover:text-foreground"
                       >
                         <X className="h-4 w-4" />

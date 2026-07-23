@@ -19,7 +19,11 @@ export async function GET(
     }
 
     const content = await prisma.content.findMany({
-      where: { creatorId: creator.id, isPublished: true },
+      where: {
+        creatorId: creator.id,
+        isPublished: true,
+        moderationStatus: 'APPROVED',
+      },
       orderBy: { createdAt: 'desc' },
       take: 50,
       include: { _count: { select: { purchases: true } } },

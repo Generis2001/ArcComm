@@ -47,7 +47,14 @@ export async function POST(req: NextRequest) {
     } else if (input.type === 'CONTENT_PURCHASE') {
       if (!input.contentId) throw new PaymentError('contentId required');
       const content = await prisma.content.findUnique({ where: { id: input.contentId } });
-      if (!content || !content.priceUsdc) throw new NotFoundError('Content');
+      if (
+        !content ||
+        !content.priceUsdc ||
+        !content.isPublished ||
+        content.moderationStatus !== 'APPROVED'
+      ) {
+        throw new NotFoundError('Content');
+      }
       if (content.creatorId !== creator.id) throw new PaymentError('Content does not belong to creator');
       const existing = await prisma.purchase.findFirst({
         where: { userId: user.id, contentId: content.id },

@@ -26,7 +26,7 @@ async function getCreator(handle: string): Promise<(CreatorProfile & { content: 
         orderBy: { priceUsdc: 'asc' },
       },
       content: {
-        where: { isPublished: true },
+        where: { isPublished: true, moderationStatus: 'APPROVED' },
         orderBy: { createdAt: 'desc' },
         take: 50,
         include: { _count: { select: { purchases: true } } },

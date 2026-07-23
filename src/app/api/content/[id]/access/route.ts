@@ -21,7 +21,13 @@ export async function GET(req: NextRequest, { params }: RouteContext) {
       include: { accessRules: true },
     });
 
-    if (!content || !content.isPublished) throw new NotFoundError('Content');
+    if (
+      !content ||
+      !content.isPublished ||
+      content.moderationStatus !== 'APPROVED'
+    ) {
+      throw new NotFoundError('Content');
+    }
 
     // Free content is always accessible
     if (content.isFree || content.accessType === 'FREE') {
